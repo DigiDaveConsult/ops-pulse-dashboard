@@ -16,26 +16,21 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; min-height:100vh; }
 select,button,input { font-family:'DM Sans',sans-serif; }
-.mono { font-family:var(--mono); }
 
 /* HEADER */
 .header { background:linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%); border-bottom:1px solid var(--border); padding:20px 32px; }
 .header-inner { max-width:1400px; margin:0 auto; }
 .header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
 .header-badge { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
-.header-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 8px #10b98166; }
+.header-dot { width:8px; height:8px; border-radius:50%; box-shadow:0 0 8px #10b98166; }
 .header-label { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text3); }
 .header h1 { font-size:22px; font-weight:700; color:var(--text); }
 .header-right { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-
-/* DATE RANGE PICKER */
 .date-range { display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 12px; }
 .date-range label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text3); }
 .date-range input[type="date"] { background:transparent; border:1px solid var(--border); border-radius:4px; padding:4px 8px; color:var(--text); font-family:var(--mono); font-size:12px; outline:none; }
 .date-range input[type="date"]:focus { border-color:var(--teal); }
 .date-range span { color:var(--text3); font-size:12px; }
-
-/* FILTERS */
 .filters { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
 .filter-group { display:flex; flex-direction:column; gap:4px; }
 .filter-label { font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--text3); }
@@ -44,6 +39,8 @@ select,button,input { font-family:'DM Sans',sans-serif; }
 .clear-btn { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:6px 14px; color:var(--text2); font-size:12px; font-weight:600; cursor:pointer; height:33px; }
 .clear-btn:hover { background:var(--border); }
 .filter-info { font-size:12px; color:var(--yellow); font-weight:500; padding-bottom:6px; }
+.data-status { font-size:11px; color:var(--text3); display:flex; align-items:center; gap:6px; }
+.data-status .dot { width:6px; height:6px; border-radius:50%; }
 
 /* TABS */
 .tabs-wrap { max-width:1400px; margin:0 auto; padding:20px 32px 0; }
@@ -51,12 +48,10 @@ select,button,input { font-family:'DM Sans',sans-serif; }
 .tab { padding:10px 20px; font-size:14px; font-weight:600; background:transparent; color:var(--text3); border:1px solid transparent; border-bottom:none; border-radius:8px 8px 0 0; cursor:pointer; margin-bottom:-1px; transition:all 0.2s; }
 .tab:hover { color:var(--text2); }
 .tab.active { background:var(--surface); color:var(--text); border-color:var(--border); border-bottom-color:var(--bg); }
-
-/* CONTENT */
 .content { max-width:1400px; margin:0 auto; padding:0 32px 40px; }
 .hidden { display:none !important; }
 
-/* KPI GRID */
+/* KPI */
 .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
 .kpi-card { background:var(--surface); border-radius:12px; padding:20px; border:1px solid var(--border); position:relative; overflow:hidden; }
 .kpi-bar { position:absolute; top:0; left:0; right:0; height:3px; }
@@ -64,25 +59,16 @@ select,button,input { font-family:'DM Sans',sans-serif; }
 .kpi-value { font-size:28px; font-weight:700; color:var(--text); font-family:var(--mono); margin-bottom:4px; display:flex; align-items:baseline; gap:8px; }
 .kpi-desc { font-size:11px; font-weight:600; padding:2px 8px; border-radius:10px; }
 .kpi-sub { font-size:12px; color:var(--text3); margin-bottom:8px; }
-
-/* SPARKLINE */
 .sparkline-wrap { height:32px; margin-top:8px; }
 .sparkline-wrap svg { width:100%; height:32px; }
 .spark-line { fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .spark-area { opacity:0.15; }
-.spark-dot { r:3; }
 
-/* HEALTH ROW */
-.health-row { display:flex; gap:12px; align-items:center; margin-top:4px; }
-.health-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text2); }
-.health-box { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:14px; font-weight:700; }
-
-/* CLIENT TABLE */
+/* TABLE */
 .card { background:var(--surface); border-radius:12px; border:1px solid var(--border); padding:24px; margin-bottom:20px; }
 .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
 .card h3 { font-size:16px; font-weight:600; color:var(--text); margin:0; }
 .card-sub { font-size:12px; color:var(--text3); }
-
 table { width:100%; border-collapse:collapse; }
 th { padding:10px 14px; text-align:left; font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text3); border-bottom:1px solid var(--border); }
 .crow { border-bottom:1px solid #1e2235; cursor:pointer; transition:background 0.15s; }
@@ -90,71 +76,37 @@ th { padding:10px 14px; text-align:left; font-size:10px; font-weight:600; letter
 .crow.exp { background:var(--surface2); border-bottom:none; }
 td { padding:12px 14px; font-size:13px; color:var(--text2); }
 
-/* PILLS & BLOCKS */
-.pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:16px; font-size:12px; font-weight:600; }
-.pill-dot { width:7px; height:7px; border-radius:50%; }
-.blocks { display:flex; gap:2px; }
-.block { width:12px; height:12px; border-radius:2px; }
-.mini-pill { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; }
-
-/* PROJECT EXPAND */
-.expand-panel { padding:0; background:transparent; }
+/* EXPAND / PROJECT */
 .expand-inner { padding:12px 16px 16px; background:var(--bg); border-radius:8px; border:1px solid #1e2235; margin:4px 14px 12px; }
 .expand-lbl { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text3); margin-bottom:12px; }
 .proj-card { padding:12px 16px; background:var(--surface); border-radius:8px; border:1px solid var(--border); margin-bottom:8px; }
 .proj-card:last-child { margin-bottom:0; }
-.proj-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.proj-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:8px; }
 .proj-name { font-size:14px; font-weight:600; color:var(--text); }
 .proj-badges { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .proj-metrics { display:grid; grid-template-columns:repeat(3,auto); gap:16px; font-size:12px; }
 .proj-metric-label { color:var(--text3); font-size:10px; text-transform:uppercase; letter-spacing:0.5px; }
 .proj-metric-val { font-family:var(--mono); font-size:14px; font-weight:600; }
+.mini-pill { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; }
 
-/* SKIP SUMMARY */
+/* SKIP */
 .skip-summary { background:var(--surface); border-radius:12px; border:1px solid var(--border); padding:20px; margin-bottom:20px; }
 .skip-row { display:flex; gap:16px; padding:6px 0; border-bottom:1px solid #1e2235; font-size:13px; }
 .skip-row:last-child { border-bottom:none; }
 
-/* AI TAB */
-.ai-banner { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:14px 18px; background:linear-gradient(135deg, var(--surface), #1e1535); border-radius:10px; border:1px solid #2d2148; }
-.ai-btn { background:linear-gradient(135deg, #7c3aed, #6d28d9); border:none; border-radius:8px; padding:10px 20px; color:white; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:opacity 0.2s; }
-.ai-btn:hover { opacity:0.9; }
-.ai-btn:disabled { opacity:0.5; cursor:not-allowed; }
-.ai-range { display:flex; align-items:center; gap:8px; margin-left:auto; }
-.ai-range label { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:1px; }
-.ai-range select { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:4px 8px; color:var(--text); font-size:13px; }
-.ai-loading { text-align:center; padding:40px; color:var(--purple); font-size:14px; }
-.ai-loading .spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--purple); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-right:8px; vertical-align:middle; }
-@keyframes spin { to { transform:rotate(360deg); } }
-
-.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
-.theme-card { padding:14px 16px; border-radius:10px; background:var(--bg); border:1px solid #1e2235; margin-bottom:10px; }
-.theme-card:last-child { margin-bottom:0; }
-.theme-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-.theme-count { font-size:10px; font-weight:700; padding:2px 8px; border-radius:6px; }
-.theme-detail { font-size:12px; color:var(--text3); }
-
-.risk-card { padding:12px 16px; border-radius:10px; background:var(--bg); border:1px solid #1e2235; margin-bottom:8px; cursor:pointer; }
-.risk-card:last-child { margin-bottom:0; }
-.risk-top { display:flex; justify-content:space-between; align-items:center; }
-.risk-expand { margin-top:8px; padding-top:8px; border-top:1px solid #1e2235; font-size:13px; color:var(--text2); line-height:1.6; }
-.sev-badge { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; border-radius:6px; }
-
-.opp-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.opp-card { padding:14px 16px; border-radius:10px; background:var(--bg); border:1px solid #1e2235; }
-.opp-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-
-.ai-section { margin-bottom:16px; }
+/* AI */
+.ai-banner { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding:14px 18px; background:linear-gradient(135deg, var(--surface), #1e1535); border-radius:10px; border:1px solid #2d2148; flex-wrap:wrap; }
 .ai-section-title { font-size:13px; font-weight:600; color:var(--purple); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
 .ai-prose { font-size:14px; line-height:1.7; color:var(--text2); }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 
-/* INDIVIDUAL RESPONSES */
+/* DETAIL */
 .detail-card { background:var(--surface); border-radius:12px; border:1px solid var(--border); padding:20px; margin-bottom:14px; }
-.detail-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.detail-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
 .detail-name { font-size:15px; font-weight:600; color:var(--text); }
 .detail-sub { font-size:12px; color:var(--text3); margin-top:2px; }
 .status-badge { font-size:12px; font-weight:600; padding:4px 12px; border-radius:16px; }
-.metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
 .metric { padding:10px 14px; border-radius:8px; background:var(--bg); border:1px solid #1e2235; }
 .metric-lbl { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text3); margin-bottom:4px; }
 .metric-val { font-size:16px; font-weight:700; font-family:var(--mono); }
@@ -163,21 +115,18 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 .text-field-lbl { font-size:12px; font-weight:600; color:var(--text3); margin-bottom:4px; }
 .text-field-val { font-size:13px; color:var(--text2); line-height:1.6; padding:10px 14px; background:var(--bg); border-radius:8px; border:1px solid #1e2235; }
 
-/* EMPTY STATE */
+/* MISC */
 .empty { padding:60px; text-align:center; color:var(--text3); background:var(--surface); border-radius:12px; border:1px solid var(--border); font-size:14px; }
-
-/* LOADING */
 .page-loading { display:flex; flex-direction:column; align-items:center; justify-content:center; height:60vh; gap:16px; }
 .page-loading .spinner { width:32px; height:32px; border:3px solid var(--teal); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.upload-zone { border:2px dashed var(--border); border-radius:12px; padding:40px; text-align:center; cursor:pointer; transition:border-color 0.2s; margin-bottom:20px; }
+.upload-zone:hover { border-color:var(--teal); }
+.upload-zone.dragover { border-color:var(--teal); background:var(--teal-bg); }
 
-/* DATA STATUS */
-.data-status { font-size:11px; color:var(--text3); display:flex; align-items:center; gap:6px; }
-.data-status .dot { width:6px; height:6px; border-radius:50%; }
-
-/* RESPONSIVE */
 @media (max-width:900px) {
   .kpi-grid { grid-template-columns:repeat(2,1fr); }
-  .two-col, .opp-grid { grid-template-columns:1fr; }
+  .two-col { grid-template-columns:1fr; }
   .metrics-grid { grid-template-columns:repeat(2,1fr); }
 }
 </style>
@@ -189,7 +138,7 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
     <div class="header-top">
       <div>
         <div class="header-badge">
-          <div class="header-dot" id="statusDot"></div>
+          <div class="header-dot" id="statusDot" style="background:var(--text3)"></div>
           <span class="header-label">Ops Pulse</span>
         </div>
         <h1>Pulse Check Dashboard</h1>
@@ -197,11 +146,14 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
       <div class="header-right">
         <div class="date-range">
           <label>From</label>
-          <input type="date" id="dateFrom" onchange="onDateChange()">
+          <input type="date" id="dateFrom" onchange="render()">
           <span>→</span>
           <label>To</label>
-          <input type="date" id="dateTo" onchange="onDateChange()">
+          <input type="date" id="dateTo" onchange="render()">
         </div>
+        <button class="refresh-btn" id="refreshBtn" onclick="refreshData()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
+          <span id="refreshIcon">🔄</span> Refresh Data
+        </button>
         <div class="data-status" id="dataStatus">
           <div class="dot" style="background:var(--text3)"></div>
           <span>Loading...</span>
@@ -231,8 +183,9 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 <div class="content">
   <div id="loadingState" class="page-loading">
     <div class="spinner"></div>
-    <div style="color:var(--text2);font-size:14px">Connecting to SharePoint...</div>
+    <div style="color:var(--text2);font-size:14px">Loading pulse data from Google Sheets...</div>
   </div>
+
   <div id="overviewTab" class="hidden"></div>
   <div id="aiTab" class="hidden"></div>
   <div id="detailTab" class="hidden"></div>
@@ -240,184 +193,62 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 
 <script>
 // ============================================================
-// CONFIGURATION
+// CONFIGURATION — SET YOUR GOOGLE SHEET ID HERE
 // ============================================================
-const SP_SITE = "https://digineer.sharepoint.com/sites/Digineer-EngagementManagement";
-const SUBMISSIONS_LIST = "Test_InternalValue_Submissions";
-const CONSULTANTS_LIST = "Test_InternalValue_ConsultantsList";
+const SHEET_ID = "1ycq6Oi9U5ThnisDc0Ij8QYwKmqQiD57O9lTRrb4wskc";
+const SUBMISSIONS_TAB = "Submissions";
+const AI_TAB = "AI_Analysis";
+function sheetCsvUrl(tab) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`; }
 
-// Claude API - set your key here (internal use only)
-const CLAUDE_API_KEY = "YOUR_API_KEY_HERE";
-const CLAUDE_MODEL = "claude-sonnet-4-5-20250929";
-
-// ============================================================
 // STATE
-// ============================================================
-let ALL_DATA = [];
-let CONSULTANTS = [];
-let currentTab = 'overview';
-let expandedClient = null;
-let expandedRisk = null;
-let aiCache = {};
-let aiResult = null;
-let isLoadingAI = false;
-let dataLoaded = false;
+let ALL_DATA = [], AI_ANALYSIS = null, currentTab = 'overview', expandedClient = null, dataLoaded = false;
+const TONE = {1:'Challenging',2:'Stable',3:'Positive',4:'Collaborative'};
+const CONF = {1:'At Risk',2:'Concerning',3:'Stable But Watchful',4:'On Track',5:'Strong'};
+const BW = {1:'Buried',2:'Heavy',3:'Busy',4:'Good',5:'Open'};
 
-// ============================================================
-// SCALE LABELS & COLORS
-// ============================================================
-const TONE_LABELS = { 1:'Challenging', 2:'Stable', 3:'Positive', 4:'Collaborative' };
-const CONF_LABELS = { 1:'At Risk', 2:'Concerning', 3:'Stable But Watchful', 4:'On Track', 5:'Strong' };
-const BW_LABELS = { 1:'Buried', 2:'Heavy', 3:'Busy', 4:'Good', 5:'Open' };
+function scaleColor(v,m){if(m===4){if(v<=1.5)return'var(--red)';if(v<=2.5)return'var(--yellow)';if(v<=3.2)return'var(--green)';return'#059669'}if(v<=1.5)return'var(--red)';if(v<=2.5)return'var(--orange)';if(v<=3.5)return'var(--yellow)';if(v<=4.2)return'var(--green)';return'#059669'}
+function lbl(v,m){return m[Math.round(v)]||'—'}
+function esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function num(v){if(v===null||v===undefined||v==='')return null;const n=Number(v);return isNaN(n)?null:n}
 
-function scaleColor(val, max) {
-  if (max === 4) {
-    if (val <= 1.5) return 'var(--red)';
-    if (val <= 2.5) return 'var(--yellow)';
-    if (val <= 3.2) return 'var(--green)';
-    return '#059669';
-  }
-  if (val <= 1.5) return 'var(--red)';
-  if (val <= 2.5) return 'var(--orange)';
-  if (val <= 3.5) return 'var(--yellow)';
-  if (val <= 4.2) return 'var(--green)';
-  return '#059669';
-}
+// CSV PARSER
+function parseCsv(text){const lines=[];let cur='',inQ=false,row=[];for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(inQ){if(ch==='"'&&nx==='"'){cur+='"';i++}else if(ch==='"')inQ=false;else cur+=ch}else{if(ch==='"')inQ=true;else if(ch===','){row.push(cur.trim());cur=''}else if(ch==='\n'||(ch==='\r'&&nx==='\n')){row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];if(ch==='\r')i++}else cur+=ch}}row.push(cur.trim());if(row.some(c=>c!==''))lines.push(row);return lines}
+function csvToObj(text){const lines=parseCsv(text);if(lines.length<2)return[];const hdr=lines[0];return lines.slice(1).map(row=>{const o={};hdr.forEach((h,i)=>{o[h]=row[i]||''});return o})}
 
-function scaleLabel(val, map) {
-  const rounded = Math.round(val);
-  return map[rounded] || '—';
-}
-
-function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-// ============================================================
-// SHAREPOINT DATA FETCH
-// ============================================================
-async function fetchSPList(listName, select, top) {
-  const url = `${SP_SITE}/_api/web/lists/getbytitle('${listName}')/items?$top=${top||500}&$select=${select}`;
-  const resp = await fetch(url, { headers: { 'Accept': 'application/json;odata=nometadata' }, credentials: 'include' });
-  if (!resp.ok) throw new Error(`SP fetch failed: ${resp.status} ${resp.statusText}`);
-  const data = await resp.json();
-  return data.value;
-}
-
-async function loadData() {
-  try {
-    document.getElementById('dataStatus').innerHTML = '<div class="dot" style="background:var(--yellow)"></div><span>Fetching data...</span>';
-
-    // Fetch submissions
-    const subFields = 'Id,ConsultantName,Client,Industry,PracticeArea,Role,ProjectDescription,PromptVersion,ResponseStatus,SubmissionDate,' +
-      'ClientTone,EngagementConfidence,Bandwidth,LeadershipKnow,WhatWouldChange,WhatHeard,SkipReason,' +
-      'ProjectHealth,ClientHealth,TeamSentiment,WeeklyHighlight,RiskNarrative,OpportunitySignal';
-    const rawSubs = await fetchSPList(SUBMISSIONS_LIST, subFields, 2000);
-
-    // Fetch consultants
-    const conFields = 'Id,ConsultantName,ConsultantEmail,Client,ManagerEmail,ProjectDescription,Industry,PracticeArea,Role,IsActive';
-    const rawCons = await fetchSPList(CONSULTANTS_LIST, conFields, 200);
-
-    CONSULTANTS = rawCons.map(c => ({
-      name: c.ConsultantName,
-      email: c.ConsultantEmail,
-      client: c.Client,
-      manager: c.ManagerEmail,
-      project: c.ProjectDescription || '',
-      industry: extractChoice(c.Industry),
-      practiceArea: extractChoice(c.PracticeArea),
-      role: extractChoice(c.Role),
-      active: c.IsActive
-    }));
-
-    // Normalize submissions
-    ALL_DATA = rawSubs.map(s => {
-      const isV2 = s.PromptVersion === 2 || s.PromptVersion === '2';
-      return {
-        id: s.Id,
-        consultant: s.ConsultantName || '',
-        client: s.Client || '',
-        industry: extractChoice(s.Industry) || '',
-        practiceArea: extractChoice(s.PracticeArea) || '',
-        role: extractChoice(s.Role) || '',
-        project: s.ProjectDescription || '',
-        version: isV2 ? 2 : 1,
-        status: s.ResponseStatus || 'Completed',
-        date: s.SubmissionDate ? new Date(s.SubmissionDate) : null,
-        // V2 fields
-        clientTone: isV2 ? parseNum(s.ClientTone) : null,
-        engagementConfidence: isV2 ? parseNum(s.EngagementConfidence) : null,
-        bandwidth: parseNum(s.Bandwidth),
-        leadershipKnow: s.LeadershipKnow || '',
-        whatWouldChange: s.WhatWouldChange || '',
-        whatHeard: s.WhatHeard || '',
-        skipReason: s.SkipReason || '',
-        // V1 fields (backward compat)
-        projectHealth: s.ProjectHealth || null,
-        clientHealth: s.ClientHealth || null,
-        teamSentiment: parseNum(s.TeamSentiment),
-        highlight: s.WeeklyHighlight || '',
-        risk: s.RiskNarrative || '',
-        opportunity: s.OpportunitySignal || ''
-      };
-    }).sort((a, b) => (b.date || 0) - (a.date || 0));
-
-    dataLoaded = true;
-    setDateDefaults();
-    populateFilters();
-    document.getElementById('loadingState').classList.add('hidden');
-    document.getElementById('overviewTab').classList.remove('hidden');
-    document.getElementById('dataStatus').innerHTML = `<div class="dot" style="background:var(--green)"></div><span>${ALL_DATA.length} records loaded</span>`;
-    document.getElementById('statusDot').style.background = 'var(--green)';
-    render();
-  } catch (err) {
-    console.error('Data load error:', err);
-    document.getElementById('loadingState').innerHTML = `
-      <div style="text-align:center;color:var(--red);font-size:14px">
-        <div style="font-size:18px;margin-bottom:8px">⚠ Connection Error</div>
-        <div style="color:var(--text2);margin-bottom:16px">${esc(err.message)}</div>
-        <div style="color:var(--text3);font-size:12px">Make sure you're logged into SharePoint and have access to the Engagement Management site.</div>
-        <button onclick="loadData()" style="margin-top:16px;padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button>
-      </div>`;
-    document.getElementById('dataStatus').innerHTML = '<div class="dot" style="background:var(--red)"></div><span>Connection failed</span>';
+// DATA LOADING
+async function loadData(){
+  try{
+    updateStatus('loading','Fetching submissions...');
+    const r=await fetch(sheetCsvUrl(SUBMISSIONS_TAB));if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
+    const rows=csvToObj(await r.text());
+    ALL_DATA=rows.map(s=>({consultant:s.ConsultantName||'',client:s.Client||'',industry:s.Industry||'',practiceArea:s.PracticeArea||'',role:s.Role||'',project:s.ProjectDescription||'',status:s.ResponseStatus||'Completed',date:s.SubmissionDate?new Date(s.SubmissionDate):null,clientTone:num(s.ClientTone),engagementConfidence:num(s.EngagementConfidence),bandwidth:num(s.Bandwidth),leadershipKnow:s.LeadershipKnow||'',whatWouldChange:s.WhatWouldChange||'',whatHeard:s.WhatHeard||'',skipReason:s.SkipReason||''})).filter(d=>d.consultant||d.client).sort((a,b)=>(b.date||0)-(a.date||0));
+    try{const ar=await fetch(sheetCsvUrl(AI_TAB));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){const l=aiRows[aiRows.length-1];AI_ANALYSIS={summary:l.Summary||'',themes:l.Themes||'',risks:l.Risks||'',opportunities:l.Opportunities||'',patterns:l.Patterns||'',generatedAt:l.GeneratedAt||''}}}}catch(e){console.warn('AI tab not found:',e.message)}
+    dataLoaded=true;document.getElementById('loadingState').classList.add('hidden');document.getElementById('overviewTab').classList.remove('hidden');
+    updateStatus('ok',`${ALL_DATA.length} records loaded`);setDateDefaults();populateFilters();render();
+  }catch(err){
+    console.error(err);
+    document.getElementById('loadingState').innerHTML=`<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
+    updateStatus('error','Load failed');
   }
 }
-
-function extractChoice(val) {
-  if (!val) return '';
-  if (typeof val === 'string') return val;
-  if (val.Value) return val.Value;
-  if (val['@odata.type']) return val.Value || '';
-  return String(val);
-}
-
-function parseNum(v) {
-  if (v === null || v === undefined || v === '') return null;
-  const n = Number(v);
-  return isNaN(n) ? null : n;
-}
+function updateStatus(s,msg){const c={ok:'var(--green)',loading:'var(--yellow)',error:'var(--red)'};document.getElementById('statusDot').style.background=c[s]||'var(--text3)';document.getElementById('dataStatus').innerHTML=`<div class="dot" style="background:${c[s]||'var(--text3)'}"></div><span>${msg}</span>`}
+async function refreshData(){const btn=document.getElementById('refreshBtn'),icon=document.getElementById('refreshIcon');btn.disabled=true;icon.textContent='⟳';icon.style.display='inline-block';icon.style.animation='spin 0.8s linear infinite';await loadData();btn.disabled=false;icon.textContent='🔄';icon.style.animation=''}
 
 // ============================================================
-// DATE & FILTER LOGIC
+// DATE & FILTERS
 // ============================================================
 function setDateDefaults() {
-  if (!ALL_DATA.length) return;
   const dates = ALL_DATA.filter(d => d.date).map(d => d.date);
   if (!dates.length) return;
-  const maxDate = new Date(Math.max(...dates));
-  const minDate = new Date(Math.min(...dates));
-  // Default: last 4 weeks from most recent
-  const fourWeeksAgo = new Date(maxDate);
-  fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
-  const from = fourWeeksAgo > minDate ? fourWeeksAgo : minDate;
-
+  const maxD = new Date(Math.max(...dates));
+  const minD = new Date(Math.min(...dates));
+  const fourWeeks = new Date(maxD); fourWeeks.setDate(fourWeeks.getDate() - 28);
+  const from = fourWeeks > minD ? fourWeeks : minD;
   document.getElementById('dateFrom').value = fmt(from);
-  document.getElementById('dateTo').value = fmt(maxDate);
-  document.getElementById('dateFrom').min = fmt(minDate);
-  document.getElementById('dateTo').max = fmt(maxDate);
+  document.getElementById('dateTo').value = fmt(maxD);
 }
 
 function fmt(d) { return d.toISOString().split('T')[0]; }
-
-function onDateChange() { expandedClient = null; render(); }
 
 function getFiltered() {
   const from = document.getElementById('dateFrom').value ? new Date(document.getElementById('dateFrom').value + 'T00:00:00') : null;
@@ -432,7 +263,6 @@ function getFiltered() {
   if (from) d = d.filter(r => r.date && r.date >= from);
   if (to) d = d.filter(r => r.date && r.date <= to);
   const total = d.length;
-
   if (fi !== 'All') d = d.filter(r => r.industry === fi);
   if (fp !== 'All') d = d.filter(r => r.practiceArea === fp);
   if (fc !== 'All') d = d.filter(r => r.client === fc);
@@ -448,13 +278,9 @@ function getFiltered() {
 }
 
 function populateFilters() {
-  const fields = [
-    { id: 'fI', key: 'industry' }, { id: 'fP', key: 'practiceArea' },
-    { id: 'fC', key: 'client' }, { id: 'fPrj', key: 'project' }, { id: 'fR', key: 'role' }
-  ];
-  fields.forEach(f => {
+  [{ id:'fI', k:'industry' }, { id:'fP', k:'practiceArea' }, { id:'fC', k:'client' }, { id:'fPrj', k:'project' }, { id:'fR', k:'role' }].forEach(f => {
     const sel = document.getElementById(f.id);
-    const vals = [...new Set(ALL_DATA.map(d => d[f.key]).filter(Boolean))].sort();
+    const vals = [...new Set(ALL_DATA.map(d => d[f.k]).filter(Boolean))].sort();
     sel.innerHTML = '<option>All</option>' + vals.map(v => `<option>${esc(v)}</option>`).join('');
   });
 }
@@ -465,218 +291,139 @@ function clearFilters() {
 }
 
 // ============================================================
-// TAB SWITCHING
+// TABS
 // ============================================================
 function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   ['overviewTab','aiTab','detailTab'].forEach(id => document.getElementById(id).classList.add('hidden'));
-  const tabEl = document.getElementById(tab + 'Tab');
-  tabEl.classList.remove('hidden');
+  document.getElementById(tab + 'Tab').classList.remove('hidden');
   render();
 }
 
 // ============================================================
-// SPARKLINE RENDERING
+// SPARKLINES
 // ============================================================
-function sparklineSVG(points, color, height) {
+function spark(points, color) {
   if (!points || points.length < 2) return '';
-  const h = height || 28;
-  const w = 120;
-  const pad = 4;
-  const min = Math.min(...points) * 0.9;
-  const max = Math.max(...points) * 1.1 || 1;
-  const range = max - min || 1;
-  const coords = points.map((v, i) => {
-    const x = pad + (i / (points.length - 1)) * (w - pad * 2);
-    const y = h - pad - ((v - min) / range) * (h - pad * 2);
-    return { x, y };
-  });
-  const linePath = coords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
-  const areaPath = linePath + ` L${coords[coords.length-1].x.toFixed(1)},${h} L${coords[0].x.toFixed(1)},${h} Z`;
-  const lastPt = coords[coords.length - 1];
+  const h = 28, w = 120, pad = 4;
+  const min = Math.min(...points) * 0.9, max = Math.max(...points) * 1.1 || 1, range = max - min || 1;
+  const coords = points.map((v, i) => ({
+    x: pad + (i / (points.length - 1)) * (w - pad * 2),
+    y: h - pad - ((v - min) / range) * (h - pad * 2)
+  }));
+  const line = coords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+  const area = line + ` L${coords[coords.length-1].x.toFixed(1)},${h} L${coords[0].x.toFixed(1)},${h} Z`;
+  const last = coords[coords.length - 1];
   return `<div class="sparkline-wrap"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
-    <path d="${areaPath}" fill="${color}" class="spark-area"/>
-    <path d="${linePath}" stroke="${color}" class="spark-line"/>
-    <circle cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="3" fill="${color}" class="spark-dot"/>
+    <path d="${area}" fill="${color}" class="spark-area"/>
+    <path d="${line}" stroke="${color}" class="spark-line"/>
+    <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="3" fill="${color}"/>
   </svg></div>`;
 }
 
-function getWeeklyTrend(data, field) {
-  // Group by week
+function weeklyAvg(data, field) {
   const weeks = {};
   data.forEach(d => {
     if (!d.date || d.status !== 'Completed') return;
-    const wk = getWeekKey(d.date);
+    const wk = weekKey(d.date);
     if (!weeks[wk]) weeks[wk] = [];
     const val = d[field];
     if (val !== null && val !== undefined) weeks[wk].push(val);
   });
-  const sorted = Object.keys(weeks).sort();
-  return sorted.map(wk => {
-    const vals = weeks[wk];
-    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
-  }).filter(v => v !== null);
+  return Object.keys(weeks).sort().map(wk => weeks[wk].length ? weeks[wk].reduce((a, b) => a + b, 0) / weeks[wk].length : null).filter(v => v !== null);
 }
 
-function getWeekKey(date) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
+function weeklyCounts(data) {
+  const weeks = {};
+  data.forEach(d => { if (!d.date) return; const wk = weekKey(d.date); weeks[wk] = (weeks[wk] || 0) + (d.status === 'Completed' ? 1 : 0); });
+  return Object.keys(weeks).sort().map(wk => weeks[wk]);
+}
+
+function weekKey(date) {
+  const d = new Date(date); d.setHours(0,0,0,0);
   d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-  const week1 = new Date(d.getFullYear(), 0, 4);
-  const weekNum = 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-  return `${d.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+  const w1 = new Date(d.getFullYear(), 0, 4);
+  const wn = 1 + Math.round(((d - w1) / 86400000 - 3 + (w1.getDay() + 6) % 7) / 7);
+  return `${d.getFullYear()}-W${String(wn).padStart(2, '0')}`;
 }
 
-function trendDelta(points) {
+function delta(points) {
   if (!points || points.length < 2) return '';
-  const prev = points[points.length - 2];
-  const curr = points[points.length - 1];
-  const delta = curr - prev;
-  if (Math.abs(delta) < 0.05) return '<span class="kpi-desc" style="background:var(--border);color:var(--text2)">→ Flat</span>';
-  const up = delta > 0;
-  const color = up ? 'var(--green)' : 'var(--red)';
-  const bg = up ? 'var(--green-bg)' : 'var(--red-bg)';
-  return `<span class="kpi-desc" style="background:${bg};color:${color}">${up ? '↑' : '↓'} ${Math.abs(delta).toFixed(1)}</span>`;
+  const d = points[points.length - 1] - points[points.length - 2];
+  if (Math.abs(d) < 0.05) return '<span class="kpi-desc" style="background:var(--border);color:var(--text2)">→ Flat</span>';
+  const up = d > 0;
+  return `<span class="kpi-desc" style="background:${up ? 'var(--green-bg)' : 'var(--red-bg)'};color:${up ? 'var(--green)' : 'var(--red)'}">${up ? '↑' : '↓'} ${Math.abs(d).toFixed(1)}</span>`;
 }
 
 // ============================================================
-// OVERVIEW RENDER
+// OVERVIEW
 // ============================================================
 function renderOverview() {
   const all = getFiltered();
   const comp = all.filter(d => d.status === 'Completed');
   const skip = all.filter(d => d.status === 'Skipped');
 
-  // Split by version for proper averaging
-  const v2 = comp.filter(d => d.version === 2);
-  const v1 = comp.filter(d => d.version === 1);
+  const avgT = avg(comp, 'clientTone');
+  const avgC = avg(comp, 'engagementConfidence');
+  const avgB = avg(comp, 'bandwidth');
 
-  // KPI calculations — prefer v2 fields, fall back to v1
-  const avgTone = v2.length ? (v2.reduce((s, d) => s + (d.clientTone || 0), 0) / v2.length) : null;
-  const avgConf = v2.length ? (v2.reduce((s, d) => s + (d.engagementConfidence || 0), 0) / v2.length) : null;
-  const avgBW = comp.length ? (comp.reduce((s, d) => s + (d.bandwidth || 0), 0) / comp.filter(d => d.bandwidth).length) : null;
+  const tT = weeklyAvg(all, 'clientTone'), tC = weeklyAvg(all, 'engagementConfidence'), tB = weeklyAvg(all, 'bandwidth'), tN = weeklyCounts(all);
 
-  // Trend data
-  const toneTrend = getWeeklyTrend(all, 'clientTone');
-  const confTrend = getWeeklyTrend(all, 'engagementConfidence');
-  const bwTrend = getWeeklyTrend(all, 'bandwidth');
-  const countTrend = getWeeklyCount(all);
+  let h = '<div class="kpi-grid">';
 
-  let h = `<div class="kpi-grid">`;
-
-  // Card 1: Responses
+  // Responses
   h += `<div class="kpi-card"><div class="kpi-bar" style="background:var(--blue)"></div>
     <div class="kpi-label">Responses</div>
     <div class="kpi-value">${comp.length} <span style="font-size:16px;color:var(--text3)">/ ${all.length}</span></div>
-    <div class="kpi-sub">${skip.length > 0 ? skip.length + ' skipped' : 'All responded'}</div>
-    ${sparklineSVG(countTrend, '#3b82f6')}
-  </div>`;
+    <div class="kpi-sub">${skip.length > 0 ? skip.length + ' skipped' : 'All responded'}</div>${spark(tN, '#3b82f6')}</div>`;
 
-  // Card 2: Client Tone (v2) or fallback
-  if (avgTone !== null) {
-    const toneColor = scaleColor(avgTone, 4);
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:${toneColor}"></div>
-      <div class="kpi-label">Avg Client Tone ${trendDelta(toneTrend)}</div>
-      <div class="kpi-value"><span style="color:${toneColor}">${avgTone.toFixed(1)}</span></div>
-      <div class="kpi-sub" style="color:${toneColor};font-weight:600">${scaleLabel(avgTone, TONE_LABELS)}</div>
-      ${sparklineSVG(toneTrend, toneColor)}
-    </div>`;
-  } else {
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div>
-      <div class="kpi-label">Client Tone</div><div class="kpi-value">—</div><div class="kpi-sub">No v2 data yet</div></div>`;
-  }
+  // Client Tone
+  h += kpiCard('Avg Client Tone', avgT, 4, TONE, tT, 'var(--teal)');
+  // Confidence
+  h += kpiCard('Avg Confidence', avgC, 5, CONF, tC, 'var(--purple)');
+  // Bandwidth
+  h += kpiCard('Avg Bandwidth', avgB, 5, BW, tB, 'var(--blue)');
 
-  // Card 3: Engagement Confidence (v2)
-  if (avgConf !== null) {
-    const confColor = scaleColor(avgConf, 5);
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:${confColor}"></div>
-      <div class="kpi-label">Avg Confidence ${trendDelta(confTrend)}</div>
-      <div class="kpi-value"><span style="color:${confColor}">${avgConf.toFixed(1)}</span></div>
-      <div class="kpi-sub" style="color:${confColor};font-weight:600">${scaleLabel(avgConf, CONF_LABELS)}</div>
-      ${sparklineSVG(confTrend, confColor)}
-    </div>`;
-  } else {
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div>
-      <div class="kpi-label">Engagement Confidence</div><div class="kpi-value">—</div><div class="kpi-sub">No v2 data yet</div></div>`;
-  }
+  h += '</div>';
 
-  // Card 4: Bandwidth
-  if (avgBW !== null) {
-    const bwColor = scaleColor(avgBW, 5);
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:${bwColor}"></div>
-      <div class="kpi-label">Avg Bandwidth ${trendDelta(bwTrend)}</div>
-      <div class="kpi-value"><span style="color:${bwColor}">${avgBW.toFixed(1)}</span></div>
-      <div class="kpi-sub" style="color:${bwColor};font-weight:600">${scaleLabel(avgBW, BW_LABELS)}</div>
-      ${sparklineSVG(bwTrend, bwColor)}
-    </div>`;
-  } else {
-    h += `<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div>
-      <div class="kpi-label">Bandwidth</div><div class="kpi-value">—</div><div class="kpi-sub">No data</div></div>`;
-  }
-  h += `</div>`;
-
-  // CLIENT ENGAGEMENT TABLE
+  // CLIENT TABLE
   const gMap = {};
-  comp.forEach(d => {
-    const key = d.client;
-    if (!gMap[key]) gMap[key] = { client: key, industry: d.industry, practiceArea: d.practiceArea, responses: [] };
-    gMap[key].responses.push(d);
-  });
+  comp.forEach(d => { if (!gMap[d.client]) gMap[d.client] = { client: d.client, industry: d.industry, practiceArea: d.practiceArea, rows: [] }; gMap[d.client].rows.push(d); });
   const groups = Object.values(gMap).sort((a, b) => a.client.localeCompare(b.client));
 
   h += `<div class="card"><div class="card-header"><h3>Client Engagement Health</h3><span class="card-sub">${groups.length} client${groups.length !== 1 ? 's' : ''} • Click to expand projects</span></div>`;
 
-  if (!groups.length) {
-    h += '<div class="empty">No completed responses in selected range.</div>';
-  } else {
-    h += '<table><thead><tr>';
-    ['Client', 'Industry', 'Practice Area', 'Responses', 'Avg Tone', 'Avg Confidence', 'Avg Bandwidth'].forEach(c => h += `<th>${c}</th>`);
-    h += '</tr></thead><tbody>';
-
+  if (!groups.length) { h += '<div class="empty">No completed responses in range.</div>'; }
+  else {
+    h += '<table><thead><tr><th>Client</th><th>Industry</th><th>Practice Area</th><th>Responses</th><th>Avg Tone</th><th>Avg Confidence</th><th>Avg Bandwidth</th></tr></thead><tbody>';
     groups.forEach(g => {
-      const r = g.responses;
-      const rv2 = r.filter(d => d.version === 2);
-      const at = rv2.length ? (rv2.reduce((s, d) => s + (d.clientTone || 0), 0) / rv2.length) : null;
-      const ac = rv2.length ? (rv2.reduce((s, d) => s + (d.engagementConfidence || 0), 0) / rv2.length) : null;
-      const ab = r.filter(d => d.bandwidth).length ? (r.reduce((s, d) => s + (d.bandwidth || 0), 0) / r.filter(d => d.bandwidth).length) : null;
+      const at = avg(g.rows, 'clientTone'), ac = avg(g.rows, 'engagementConfidence'), ab = avg(g.rows, 'bandwidth');
       const isExp = expandedClient === g.client;
-
       h += `<tr class="crow${isExp ? ' exp' : ''}" onclick="toggleClient('${esc(g.client).replace(/'/g, "\\'")}')">
         <td style="font-weight:600;color:var(--text)"><span style="font-size:10px;color:var(--text3);margin-right:8px">${isExp ? '▼' : '▶'}</span>${esc(g.client)}</td>
         <td>${esc(g.industry)}</td><td>${esc(g.practiceArea)}</td>
-        <td class="mono" style="font-weight:600;color:var(--text)">${r.length}</td>
-        <td>${at !== null ? `<span style="color:${scaleColor(at, 4)};font-weight:600;font-family:var(--mono)">${at.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${scaleLabel(at, TONE_LABELS)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
-        <td>${ac !== null ? `<span style="color:${scaleColor(ac, 5)};font-weight:600;font-family:var(--mono)">${ac.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${scaleLabel(ac, CONF_LABELS)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
-        <td>${ab !== null ? `<span style="color:${scaleColor(ab, 5)};font-weight:600;font-family:var(--mono)">${ab.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${scaleLabel(ab, BW_LABELS)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
+        <td style="font-family:var(--mono);font-weight:600;color:var(--text)">${g.rows.length}</td>
+        ${scaleCell(at, 4, TONE)}${scaleCell(ac, 5, CONF)}${scaleCell(ab, 5, BW)}
       </tr>`;
 
       if (isExp) {
-        // Group by project within client
         const projMap = {};
-        r.forEach(d => {
-          const pk = d.project || '(No project)';
-          if (!projMap[pk]) projMap[pk] = [];
-          projMap[pk].push(d);
-        });
-        h += `<tr><td colspan="7" class="expand-panel"><div class="expand-inner"><div class="expand-lbl">Projects — ${esc(g.client)}</div>`;
+        g.rows.forEach(d => { const pk = d.project || '(No project)'; if (!projMap[pk]) projMap[pk] = []; projMap[pk].push(d); });
+        h += `<tr><td colspan="7" style="padding:0"><div class="expand-inner"><div class="expand-lbl">Projects — ${esc(g.client)}</div>`;
         Object.entries(projMap).forEach(([proj, pData]) => {
-          const pv2 = pData.filter(d => d.version === 2);
-          const pt = pv2.length ? (pv2.reduce((s, d) => s + (d.clientTone || 0), 0) / pv2.length) : null;
-          const pc = pv2.length ? (pv2.reduce((s, d) => s + (d.engagementConfidence || 0), 0) / pv2.length) : null;
-          const pb = pData.filter(d => d.bandwidth).length ? (pData.reduce((s, d) => s + (d.bandwidth || 0), 0) / pData.filter(d => d.bandwidth).length) : null;
-          const consultants = [...new Set(pData.map(d => d.consultant))];
-
+          const pt = avg(pData, 'clientTone'), pc = avg(pData, 'engagementConfidence'), pb = avg(pData, 'bandwidth');
+          const names = [...new Set(pData.map(d => d.consultant))];
           h += `<div class="proj-card"><div class="proj-top">
             <div class="proj-name">${esc(proj)}</div>
             <div class="proj-badges">
               <span class="mini-pill" style="background:var(--teal-bg);color:var(--teal)">${pData.length} response${pData.length > 1 ? 's' : ''}</span>
-              <span style="font-size:11px;color:var(--text3)">${consultants.length} consultant${consultants.length > 1 ? 's' : ''}: ${consultants.map(c => esc(c.split(' ')[0])).join(', ')}</span>
+              <span style="font-size:11px;color:var(--text3)">${names.length} consultant${names.length > 1 ? 's' : ''}: ${names.map(c => esc(c.split(' ')[0])).join(', ')}</span>
             </div></div>
             <div class="proj-metrics">
-              <div><div class="proj-metric-label">Client Tone</div><div class="proj-metric-val" style="color:${pt !== null ? scaleColor(pt, 4) : 'var(--text3)'}">${pt !== null ? pt.toFixed(1) + ' ' + scaleLabel(pt, TONE_LABELS) : '—'}</div></div>
-              <div><div class="proj-metric-label">Confidence</div><div class="proj-metric-val" style="color:${pc !== null ? scaleColor(pc, 5) : 'var(--text3)'}">${pc !== null ? pc.toFixed(1) + ' ' + scaleLabel(pc, CONF_LABELS) : '—'}</div></div>
-              <div><div class="proj-metric-label">Bandwidth</div><div class="proj-metric-val" style="color:${pb !== null ? scaleColor(pb, 5) : 'var(--text3)'}">${pb !== null ? pb.toFixed(1) + ' ' + scaleLabel(pb, BW_LABELS) : '—'}</div></div>
+              <div><div class="proj-metric-label">Client Tone</div><div class="proj-metric-val" style="color:${pt !== null ? scaleColor(pt, 4) : 'var(--text3)'}">${pt !== null ? pt.toFixed(1) + ' ' + lbl(pt, TONE) : '—'}</div></div>
+              <div><div class="proj-metric-label">Confidence</div><div class="proj-metric-val" style="color:${pc !== null ? scaleColor(pc, 5) : 'var(--text3)'}">${pc !== null ? pc.toFixed(1) + ' ' + lbl(pc, CONF) : '—'}</div></div>
+              <div><div class="proj-metric-label">Bandwidth</div><div class="proj-metric-val" style="color:${pb !== null ? scaleColor(pb, 5) : 'var(--text3)'}">${pb !== null ? pb.toFixed(1) + ' ' + lbl(pb, BW) : '—'}</div></div>
             </div></div>`;
         });
         h += '</div></td></tr>';
@@ -701,21 +448,29 @@ function renderOverview() {
   document.getElementById('overviewTab').innerHTML = h;
 }
 
-function getWeeklyCount(data) {
-  const weeks = {};
-  data.forEach(d => {
-    if (!d.date) return;
-    const wk = getWeekKey(d.date);
-    if (!weeks[wk]) weeks[wk] = 0;
-    if (d.status === 'Completed') weeks[wk]++;
-  });
-  return Object.keys(weeks).sort().map(wk => weeks[wk]);
+// Helpers
+function avg(rows, field) {
+  const vals = rows.map(d => d[field]).filter(v => v !== null && v !== undefined);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
 }
 
-function toggleClient(client) {
-  expandedClient = expandedClient === client ? null : client;
-  render();
+function kpiCard(label, val, max, map, trend, color) {
+  if (val === null) return `<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div>
+    <div class="kpi-label">${label}</div><div class="kpi-value">—</div><div class="kpi-sub">No data</div></div>`;
+  const c = scaleColor(val, max);
+  return `<div class="kpi-card"><div class="kpi-bar" style="background:${c}"></div>
+    <div class="kpi-label">${label} ${delta(trend)}</div>
+    <div class="kpi-value"><span style="color:${c}">${val.toFixed(1)}</span></div>
+    <div class="kpi-sub" style="color:${c};font-weight:600">${lbl(val, map)}</div>
+    ${spark(trend, color || c)}</div>`;
 }
+
+function scaleCell(val, max, map) {
+  if (val === null) return '<td><span style="color:var(--text3)">—</span></td>';
+  return `<td><span style="color:${scaleColor(val, max)};font-weight:600;font-family:var(--mono)">${val.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${lbl(val, map)}</span></td>`;
+}
+
+function toggleClient(c) { expandedClient = expandedClient === c ? null : c; render(); }
 
 // ============================================================
 // AI INSIGHTS
@@ -725,227 +480,39 @@ function renderAI() {
     <span style="font-size:22px">🤖</span>
     <div>
       <div style="font-size:14px;font-weight:600;color:var(--purple)">AI-Powered Analysis</div>
-      <div style="font-size:12px;color:var(--text3)">Claude analyzes open-ended responses for themes, mismatches, and patterns</div>
+      <div style="font-size:12px;color:var(--text3)">Generated by Claude via Google Apps Script • Updates automatically on Tuesdays</div>
     </div>
-    <div class="ai-range">
-      <label>Lookback</label>
-      <select id="aiLookback" onchange="aiResult=null">
-        <option value="4">Last 4 weeks</option>
-        <option value="8">Last 8 weeks</option>
-        <option value="12">Last 12 weeks</option>
-        <option value="0">All time</option>
-        <option value="range">Use date range</option>
-      </select>
-    </div>
-    <button class="ai-btn" onclick="runAIAnalysis()" id="aiBtn">
-      <span>✨</span> Generate Insights
-    </button>
   </div>`;
 
-  if (isLoadingAI) {
-    h += '<div class="ai-loading"><span class="spinner"></span> Analyzing responses with Claude...</div>';
-  } else if (aiResult) {
-    h += renderAIResult(aiResult);
-  } else {
+  if (!AI_ANALYSIS) {
     h += `<div class="empty" style="padding:40px">
-      <div style="font-size:16px;color:var(--text2);margin-bottom:8px">No analysis generated yet</div>
-      <div style="color:var(--text3)">Click "Generate Insights" to analyze responses with Claude AI.<br>
-      Uses current filters and lookback period. Results are cached until you change settings.</div>
+      <div style="font-size:16px;color:var(--text2);margin-bottom:8px">No AI analysis available yet</div>
+      <div style="color:var(--text3)">The Google Apps Script will generate AI insights on its weekly schedule.<br>
+      You can also run it manually from the Ops Pulse menu in your Google Sheet.</div>
     </div>`;
+  } else {
+    const a = typeof AI_ANALYSIS === 'string' ? { summary: AI_ANALYSIS } : AI_ANALYSIS;
+    if (a.summary) h += `<div class="card"><div class="ai-section-title">📋 Executive Summary</div><div class="ai-prose">${fmtAI(a.summary)}</div></div>`;
+    h += '<div class="two-col">';
+    if (a.themes) h += `<div class="card"><div class="ai-section-title">🏷 Key Themes</div><div class="ai-prose">${fmtAI(a.themes)}</div></div>`;
+    if (a.risks) h += `<div class="card"><div class="ai-section-title">🚨 Risks & Mismatches</div><div class="ai-prose">${fmtAI(a.risks)}</div></div>`;
+    h += '</div><div class="two-col">';
+    if (a.opportunities) h += `<div class="card"><div class="ai-section-title">💡 Opportunities</div><div class="ai-prose">${fmtAI(a.opportunities)}</div></div>`;
+    if (a.patterns) h += `<div class="card"><div class="ai-section-title">📈 Trends & Patterns</div><div class="ai-prose">${fmtAI(a.patterns)}</div></div>`;
+    h += '</div>';
+    if (a.generatedAt) h += `<div style="text-align:right;font-size:11px;color:var(--text3)">Analysis generated ${new Date(a.generatedAt).toLocaleString()}</div>`;
   }
 
   document.getElementById('aiTab').innerHTML = h;
 }
 
-function renderAIResult(result) {
-  let h = '';
-  if (result.error) {
-    return `<div class="card" style="border-color:var(--red)"><div style="color:var(--red);font-weight:600;margin-bottom:8px">Analysis Error</div><div style="color:var(--text2)">${esc(result.error)}</div></div>`;
-  }
-
-  // Executive Summary
-  if (result.summary) {
-    h += `<div class="card"><div class="ai-section-title">📋 Executive Summary</div><div class="ai-prose">${formatAIText(result.summary)}</div></div>`;
-  }
-
-  // Themes & Risks side by side
-  h += '<div class="two-col">';
-  if (result.themes) {
-    h += `<div class="card"><div class="ai-section-title">🏷 Key Themes</div>${formatAIText(result.themes)}</div>`;
-  }
-  if (result.risks) {
-    h += `<div class="card"><div class="ai-section-title">🚨 Risks & Mismatches</div>${formatAIText(result.risks)}</div>`;
-  }
-  h += '</div>';
-
-  // Opportunities & Patterns
-  h += '<div class="two-col">';
-  if (result.opportunities) {
-    h += `<div class="card"><div class="ai-section-title">💡 Opportunities</div>${formatAIText(result.opportunities)}</div>`;
-  }
-  if (result.patterns) {
-    h += `<div class="card"><div class="ai-section-title">📈 Trends & Patterns</div>${formatAIText(result.patterns)}</div>`;
-  }
-  h += '</div>';
-
-  // Metadata
-  h += `<div style="text-align:right;font-size:11px;color:var(--text3);margin-top:8px">
-    Analysis generated ${result.timestamp ? new Date(result.timestamp).toLocaleString() : 'just now'} • ${result.responseCount || '?'} responses analyzed
-  </div>`;
-
-  return h;
-}
-
-function formatAIText(text) {
+function fmtAI(text) {
   if (!text) return '';
-  return text
+  return esc(text)
     .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text)">$1</strong>')
     .replace(/\n\n/g, '</p><p class="ai-prose">')
     .replace(/\n- /g, '<br>• ')
     .replace(/\n/g, '<br>');
-}
-
-async function runAIAnalysis() {
-  if (isLoadingAI) return;
-  if (!CLAUDE_API_KEY || CLAUDE_API_KEY === 'YOUR_API_KEY_HERE') {
-    aiResult = { error: 'Claude API key not configured. Set CLAUDE_API_KEY at the top of the dashboard HTML file.' };
-    render();
-    return;
-  }
-
-  const lookback = document.getElementById('aiLookback')?.value || '4';
-  const filtered = getAIData(lookback);
-  if (!filtered.length) {
-    aiResult = { error: 'No completed responses found for the selected period and filters.' };
-    render();
-    return;
-  }
-
-  // Cache key
-  const cacheKey = JSON.stringify({
-    lookback,
-    fi: document.getElementById('fI').value,
-    fp: document.getElementById('fP').value,
-    fc: document.getElementById('fC').value,
-    fprj: document.getElementById('fPrj').value,
-    fr: document.getElementById('fR').value,
-    count: filtered.length
-  });
-
-  if (aiCache[cacheKey]) {
-    aiResult = aiCache[cacheKey];
-    render();
-    return;
-  }
-
-  isLoadingAI = true;
-  render();
-
-  try {
-    const prompt = buildAIPrompt(filtered);
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": CLAUDE_API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        max_tokens: 2000,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-
-    const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
-
-    const text = data.content?.[0]?.text || '';
-    aiResult = parseAIResponse(text, filtered.length);
-    aiCache[cacheKey] = aiResult;
-  } catch (err) {
-    aiResult = { error: `API call failed: ${err.message}` };
-  }
-
-  isLoadingAI = false;
-  render();
-}
-
-function getAIData(lookback) {
-  let data = getFiltered().filter(d => d.status === 'Completed');
-
-  if (lookback !== 'range' && lookback !== '0') {
-    const weeks = parseInt(lookback);
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - weeks * 7);
-    data = data.filter(d => d.date && d.date >= cutoff);
-  }
-
-  return data;
-}
-
-function buildAIPrompt(data) {
-  const weeks = [...new Set(data.map(d => d.date ? getWeekKey(d.date) : '?'))].sort();
-  const clients = [...new Set(data.map(d => d.client))];
-
-  const rows = data.map(d => {
-    const parts = [`Consultant: ${d.consultant}`, `Client: ${d.client}`, `Project: ${d.project}`, `Industry: ${d.industry}`, `Practice: ${d.practiceArea}`, `Role: ${d.role}`, `Week: ${d.date ? getWeekKey(d.date) : '?'}`];
-    if (d.version === 2) {
-      parts.push(`ClientTone: ${d.clientTone} (${TONE_LABELS[d.clientTone] || '?'})`);
-      parts.push(`EngagementConfidence: ${d.engagementConfidence} (${CONF_LABELS[d.engagementConfidence] || '?'})`);
-      parts.push(`Bandwidth: ${d.bandwidth} (${BW_LABELS[d.bandwidth] || '?'})`);
-      if (d.leadershipKnow) parts.push(`Leadership Should Know: ${d.leadershipKnow}`);
-      if (d.whatWouldChange) parts.push(`Would Change: ${d.whatWouldChange}`);
-      if (d.whatHeard) parts.push(`What Heard: ${d.whatHeard}`);
-    } else {
-      parts.push(`ProjectHealth: ${d.projectHealth}`, `ClientHealth: ${d.clientHealth}`);
-      parts.push(`TeamSentiment: ${d.teamSentiment}/5`, `Bandwidth: ${d.bandwidth}/5`);
-      if (d.highlight) parts.push(`Highlight: ${d.highlight}`);
-      if (d.risk) parts.push(`Risk: ${d.risk}`);
-      if (d.opportunity) parts.push(`Opportunity: ${d.opportunity}`);
-    }
-    return parts.join(' | ');
-  });
-
-  return `You are an operational intelligence analyst for Digineer, a consulting firm. Analyze the following weekly pulse check responses from consultants across ${clients.length} client engagements spanning ${weeks.length} week(s) (${weeks[0]} to ${weeks[weeks.length-1]}).
-
-RESPONSES (${data.length} total):
-${rows.join('\n')}
-
-Provide analysis in exactly this format with these section headers. Use ** for bold. Be specific — name clients, consultants, projects. Flag contradictions between ratings and open-text.
-
-## SUMMARY
-2-3 paragraph executive summary of overall engagement health, notable shifts, and top priorities.
-
-## THEMES
-Key themes across all responses. Group by: client tone patterns, bandwidth concerns, recurring topics in open-ended answers.
-
-## RISKS
-Specific risks requiring attention. Include rating/text mismatches (e.g., positive tone rating but negative open-text). Flag persistent issues across weeks. Name the client, project, and consultant.
-
-## OPPORTUNITIES
-Expansion signals, upsell mentions, client asks. Include who mentioned them and at which client.
-
-## PATTERNS
-Trends over time if multi-week data available. Cross-client patterns. Industry-level observations. Bandwidth distribution concerns.`;
-}
-
-function parseAIResponse(text, count) {
-  const sections = {};
-  const parts = text.split(/##\s+/);
-  parts.forEach(part => {
-    const lines = part.trim().split('\n');
-    const title = lines[0]?.toUpperCase()?.trim();
-    const content = lines.slice(1).join('\n').trim();
-    if (title === 'SUMMARY') sections.summary = content;
-    else if (title === 'THEMES') sections.themes = content;
-    else if (title === 'RISKS') sections.risks = content;
-    else if (title === 'OPPORTUNITIES') sections.opportunities = content;
-    else if (title === 'PATTERNS') sections.patterns = content;
-  });
-
-  // Fallback if parsing failed
-  if (!sections.summary && text.length > 0) {
-    sections.summary = text;
-  }
-
-  return { ...sections, timestamp: Date.now(), responseCount: count };
 }
 
 // ============================================================
@@ -953,44 +520,28 @@ function parseAIResponse(text, count) {
 // ============================================================
 function renderDetail() {
   const all = getFiltered();
-
-  if (!all.length) {
-    document.getElementById('detailTab').innerHTML = '<div class="empty">No responses match current filters and date range.</div>';
-    return;
-  }
+  if (!all.length) { document.getElementById('detailTab').innerHTML = '<div class="empty">No responses match filters.</div>'; return; }
 
   let h = '';
   all.forEach(d => {
     const isSk = d.status === 'Skipped';
     h += `<div class="detail-card"><div class="detail-top"><div>
       <div class="detail-name">${esc(d.consultant)}</div>
-      <div class="detail-sub">${esc(d.client)} • ${esc(d.project || '—')} • ${esc(d.practiceArea)} • ${esc(d.role)} • ${d.date ? d.date.toLocaleDateString() : ''}</div>
+      <div class="detail-sub">${[d.client, d.project, d.practiceArea, d.role, d.date ? d.date.toLocaleDateString() : ''].filter(Boolean).map(esc).join(' • ')}</div>
     </div>
     <span class="status-badge" style="background:${isSk ? 'var(--yellow-bg)' : 'var(--green-bg)'};color:${isSk ? 'var(--yellow)' : 'var(--green)'}">${d.status}</span></div>`;
 
     if (isSk) {
       h += `<div class="text-field-val">Skipped — ${esc(d.skipReason || 'No reason given')}</div>`;
-    } else if (d.version === 2) {
+    } else {
       h += `<div class="metrics-grid">
-        <div class="metric"><div class="metric-lbl">Client Tone</div><div class="metric-val" style="color:${d.clientTone ? scaleColor(d.clientTone, 4) : 'var(--text3)'}">${d.clientTone || '—'} <span style="font-size:11px">${d.clientTone ? TONE_LABELS[d.clientTone] : ''}</span></div></div>
-        <div class="metric"><div class="metric-lbl">Confidence</div><div class="metric-val" style="color:${d.engagementConfidence ? scaleColor(d.engagementConfidence, 5) : 'var(--text3)'}">${d.engagementConfidence || '—'} <span style="font-size:11px">${d.engagementConfidence ? CONF_LABELS[d.engagementConfidence] : ''}</span></div></div>
-        <div class="metric"><div class="metric-lbl">Bandwidth</div><div class="metric-val" style="color:${d.bandwidth ? scaleColor(d.bandwidth, 5) : 'var(--text3)'}">${d.bandwidth || '—'} <span style="font-size:11px">${d.bandwidth ? BW_LABELS[d.bandwidth] : ''}</span></div></div>
-        <div class="metric"><div class="metric-lbl">Version</div><div class="metric-val" style="color:var(--teal)">v${d.version}</div></div>
+        <div class="metric"><div class="metric-lbl">Client Tone</div><div class="metric-val" style="color:${d.clientTone ? scaleColor(d.clientTone, 4) : 'var(--text3)'}">${d.clientTone || '—'} <span style="font-size:11px">${d.clientTone ? TONE[d.clientTone] : ''}</span></div></div>
+        <div class="metric"><div class="metric-lbl">Confidence</div><div class="metric-val" style="color:${d.engagementConfidence ? scaleColor(d.engagementConfidence, 5) : 'var(--text3)'}">${d.engagementConfidence || '—'} <span style="font-size:11px">${d.engagementConfidence ? CONF[d.engagementConfidence] : ''}</span></div></div>
+        <div class="metric"><div class="metric-lbl">Bandwidth</div><div class="metric-val" style="color:${d.bandwidth ? scaleColor(d.bandwidth, 5) : 'var(--text3)'}">${d.bandwidth || '—'} <span style="font-size:11px">${d.bandwidth ? BW[d.bandwidth] : ''}</span></div></div>
       </div>`;
       if (d.leadershipKnow) h += `<div class="text-field"><div class="text-field-lbl">💬 Leadership Should Know</div><div class="text-field-val">${esc(d.leadershipKnow)}</div></div>`;
       if (d.whatWouldChange) h += `<div class="text-field"><div class="text-field-lbl">🔄 Would Change</div><div class="text-field-val">${esc(d.whatWouldChange)}</div></div>`;
       if (d.whatHeard) h += `<div class="text-field"><div class="text-field-lbl">👂 What Heard</div><div class="text-field-val">${esc(d.whatHeard)}</div></div>`;
-    } else {
-      // V1 display
-      h += `<div class="metrics-grid">
-        <div class="metric"><div class="metric-lbl">Project Health</div><div class="metric-val" style="color:${healthColor(d.projectHealth)}">${d.projectHealth || '—'}</div></div>
-        <div class="metric"><div class="metric-lbl">Client Health</div><div class="metric-val" style="color:${healthColor(d.clientHealth)}">${d.clientHealth || '—'}</div></div>
-        <div class="metric"><div class="metric-lbl">Team Sentiment</div><div class="metric-val" style="color:${d.teamSentiment ? scaleColor(d.teamSentiment, 5) : 'var(--text3)'}">${d.teamSentiment || '—'}/5</div></div>
-        <div class="metric"><div class="metric-lbl">Bandwidth</div><div class="metric-val" style="color:${d.bandwidth ? scaleColor(d.bandwidth, 5) : 'var(--text3)'}">${d.bandwidth || '—'}/5</div></div>
-      </div>`;
-      if (d.highlight) h += `<div class="text-field"><div class="text-field-lbl">💡 Highlight</div><div class="text-field-val">${esc(d.highlight)}</div></div>`;
-      if (d.risk) h += `<div class="text-field"><div class="text-field-lbl">⚠️ Risk</div><div class="text-field-val">${esc(d.risk)}</div></div>`;
-      if (d.opportunity) h += `<div class="text-field"><div class="text-field-lbl">🎯 Opportunity</div><div class="text-field-val">${esc(d.opportunity)}</div></div>`;
     }
     h += '</div>';
   });
@@ -998,28 +549,12 @@ function renderDetail() {
   document.getElementById('detailTab').innerHTML = h;
 }
 
-function healthColor(v) {
-  if (v === 'Green') return 'var(--green)';
-  if (v === 'Yellow') return 'var(--yellow)';
-  if (v === 'Red') return 'var(--red)';
-  return 'var(--text3)';
-}
+// ============================================================
+// RENDER
+// ============================================================
+function render() { if (!dataLoaded) return; if (currentTab === 'overview') renderOverview(); else if (currentTab === 'ai') renderAI(); else if (currentTab === 'detail') renderDetail(); }
 
-// ============================================================
-// RENDER DISPATCHER
-// ============================================================
-function render() {
-  if (!dataLoaded) return;
-  if (currentTab === 'overview') renderOverview();
-  else if (currentTab === 'ai') renderAI();
-  else if (currentTab === 'detail') renderDetail();
-}
-
-function toggleRisk(i) { expandedRisk = expandedRisk === i ? null : i; render(); }
-
-// ============================================================
-// INIT
-// ============================================================
+// AUTO-LOAD ON PAGE OPEN
 loadData();
 </script>
 </body>
