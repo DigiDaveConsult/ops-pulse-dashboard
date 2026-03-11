@@ -247,12 +247,14 @@ async function loadData(){
     .filter(d => d.consultant || d.client)
     .sort((a,b) => (b.date || 0) - (a.date || 0));
 
-    try {
+    AI_ANALYSIS = null;
+
+    try{
       const ar = await fetch(sheetCsvUrl(AI_TAB_GID));
-      if (ar.ok) {
+      if(ar.ok){
         const aiRows = csvToObj(await ar.text());
         console.log('AI rows:', aiRows);
-        if (aiRows.length > 0) {
+        if(aiRows.length > 0){
           const l = aiRows[aiRows.length - 1];
           AI_ANALYSIS = {
             summary: l.Summary || '',
@@ -264,22 +266,41 @@ async function loadData(){
           };
         }
       }
-    } catch(e) {
+    }catch(e){
       console.warn('AI tab not found:', e.message);
     }
 
     dataLoaded = true;
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('overviewTab').classList.remove('hidden');
-    updateStatus('ok',`${ALL_DATA.length} records loaded`);
+    updateStatus('ok', `${ALL_DATA.length} records loaded`);
     setDateDefaults();
     populateFilters();
     render();
-  } catch(err){
+  }catch(err){
     console.error(err);
-    document.getElementById('loadingState').innerHTML=`<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
-    updateStatus('error','Load failed');
+    document.getElementById('loadingState').innerHTML = `<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
+    updateStatus('error', 'Load failed');
   }
+}
+
+function updateStatus(s,msg){
+  const c = {ok:'var(--green)',loading:'var(--yellow)',error:'var(--red)'};
+  document.getElementById('statusDot').style.background = c[s] || 'var(--text3)';
+  document.getElementById('dataStatus').innerHTML = `<div class="dot" style="background:${c[s]||'var(--text3)'}"></div><span>${msg}</span>`;
+}
+
+async function refreshData(){
+  const btn = document.getElementById('refreshBtn');
+  const icon = document.getElementById('refreshIcon');
+  btn.disabled = true;
+  icon.textContent = '⟳';
+  icon.style.display = 'inline-block';
+  icon.style.animation = 'spin 0.8s linear infinite';
+  await loadData();
+  btn.disabled = false;
+  icon.textContent = '🔄';
+  icon.style.animation = '';
 }
 // ============================================================
 // DATE & FILTERS
