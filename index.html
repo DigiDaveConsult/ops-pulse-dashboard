@@ -198,7 +198,12 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 const SHEET_ID = "1ycq6Oi9U5ThnisDc0Ij8QYwKmqQiD57O9lTRrb4wskc";
 const SUBMISSIONS_TAB = "Submissions";
 const AI_TAB = "AI_Analysis";
-function sheetCsvUrl(tab) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`; }
+const SUBMISSIONS_GID = "0";
+const AI_TAB_GID = "559870291";
+
+function sheetCsvUrl(gid) {
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+}
 
 // STATE
 let ALL_DATA = [], AI_ANALYSIS = null, currentTab = 'overview', expandedClient = null, dataLoaded = false;
@@ -219,10 +224,10 @@ function csvToObj(text){const lines=parseCsv(text);if(lines.length<2)return[];co
 async function loadData(){
   try{
     updateStatus('loading','Fetching submissions...');
-    const r=await fetch(sheetCsvUrl());if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
+    const r=await fetch(sheetCsvUrl(0));if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
     const rows=csvToObj(await r.text());
     ALL_DATA=rows.map(s=>({consultant:s.ConsultantName||'',client:s.Client||'',industry:s.Industry||'',practiceArea:s.PracticeArea||'',role:s.Role||'',project:s.ProjectDescription||'',status:s.ResponseStatus||'Completed',date:s.SubmissionDate?new Date(s.SubmissionDate):null,clientTone:num(s.ClientTone),engagementConfidence:num(s.EngagementConfidence),bandwidth:num(s.Bandwidth),leadershipKnow:s.LeadershipKnow||'',whatWouldChange:s.WhatWouldChange||'',whatHeard:s.WhatHeard||'',skipReason:s.SkipReason||''})).filter(d=>d.consultant||d.client).sort((a,b)=>(b.date||0)-(a.date||0));
-    try{const ar=await fetch(sheetCsvUrl(AI_TAB));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){const l=aiRows[aiRows.length-1];AI_ANALYSIS={summary:l.Summary||'',themes:l.Themes||'',risks:l.Risks||'',opportunities:l.Opportunities||'',patterns:l.Patterns||'',generatedAt:l.GeneratedAt||''}}}}catch(e){console.warn('AI tab not found:',e.message)}
+    try{const ar=await fetch(sheetCsvUrl(559870291));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){const l=aiRows[aiRows.length-1];AI_ANALYSIS={summary:l.Summary||'',themes:l.Themes||'',risks:l.Risks||'',opportunities:l.Opportunities||'',patterns:l.Patterns||'',generatedAt:l.GeneratedAt||''}}}}catch(e){console.warn('AI tab not found:',e.message)}
     dataLoaded=true;document.getElementById('loadingState').classList.add('hidden');document.getElementById('overviewTab').classList.remove('hidden');
     updateStatus('ok',`${ALL_DATA.length} records loaded`);setDateDefaults();populateFilters();render();
   }catch(err){
