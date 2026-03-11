@@ -253,7 +253,6 @@ async function loadData(){
       const ar = await fetch(sheetCsvUrl(AI_TAB_GID));
       if(ar.ok){
         const aiRows = csvToObj(await ar.text());
-        console.log('AI rows:', aiRows);
         if(aiRows.length > 0){
           const l = aiRows[aiRows.length - 1];
           AI_ANALYSIS = {
