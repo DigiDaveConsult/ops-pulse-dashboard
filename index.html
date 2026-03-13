@@ -28,8 +28,7 @@ select,button,input { font-family:'DM Sans',sans-serif; }
 .header-right { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 .date-range { display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 12px; }
 .date-range label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text3); }
-.date-range input[type="date"] { background:transparent; border:1px solid var(--border); border-radius:4px; padding:4px 8px; color:var(--text); font-family:var(--mono); font-size:12px; outline:none; }
-.date-range input[type="date"]:focus { border-color:var(--teal); }
+/* date input styles moved to enhanced version below */
 .date-range span { color:var(--text3); font-size:12px; }
 .filters { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
 .filter-group { display:flex; flex-direction:column; gap:4px; }
@@ -124,6 +123,41 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 .upload-zone:hover { border-color:var(--teal); }
 .upload-zone.dragover { border-color:var(--teal); background:var(--teal-bg); }
 
+
+/* CALENDAR PICKER - MORE VISIBLE */
+.date-range input[type="date"] { background:var(--surface2); border:2px solid var(--teal); border-radius:6px; padding:6px 10px; color:var(--text); font-family:var(--mono); font-size:13px; outline:none; cursor:pointer; }
+.date-range input[type="date"]:hover { border-color:#0fd4cd; background:var(--surface); }
+.date-range input[type="date"]:focus { border-color:#0fd4cd; box-shadow:0 0 0 2px rgba(14,165,160,0.25); }
+.date-range input[type="date"]::-webkit-calendar-picker-indicator { filter:invert(0.7) sepia(1) saturate(3) hue-rotate(140deg); cursor:pointer; font-size:16px; }
+
+/* AI SUB-TABS */
+.ai-subtabs { display:flex; gap:4px; margin-bottom:16px; }
+.ai-subtab { padding:6px 14px; font-size:12px; font-weight:600; background:var(--surface2); color:var(--text3); border:1px solid var(--border); border-radius:6px; cursor:pointer; transition:all 0.2s; }
+.ai-subtab:hover { color:var(--text2); }
+.ai-subtab.active { background:var(--purple-bg); color:var(--purple); border-color:var(--purple); }
+
+/* AI TIMEFRAME TOGGLE */
+.ai-timeframe { display:flex; gap:4px; margin-bottom:16px; }
+.ai-tf-btn { padding:5px 12px; font-size:11px; font-weight:600; background:var(--surface2); color:var(--text3); border:1px solid var(--border); border-radius:6px; cursor:pointer; }
+.ai-tf-btn.active { background:var(--teal-bg); color:var(--teal); border-color:var(--teal); }
+
+/* MEETING TOPICS */
+.meeting-client-select { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--text); font-size:13px; min-width:200px; }
+.topic-group { margin-bottom:6px; }
+.topic-label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:4px; margin-bottom:8px; display:inline-block; }
+.topic-new { background:var(--teal-bg); color:var(--teal); }
+.topic-older { background:var(--border); color:var(--text3); }
+.topic-item { padding:10px 16px; background:var(--bg); border:1px solid #1e2235; border-radius:8px; margin-bottom:6px; font-size:13px; color:var(--text2); cursor:default; }
+.topic-item .topic-project { font-size:11px; color:var(--teal); font-weight:600; margin-bottom:2px; }
+
+/* USAGE TRENDS */
+.chart-container { background:var(--bg); border:1px solid #1e2235; border-radius:8px; padding:16px; margin-bottom:16px; }
+.chart-container svg { width:100%; }
+.usage-table { width:100%; }
+.usage-table th { text-align:left; }
+.rate-bar { height:6px; border-radius:3px; background:var(--border); display:inline-block; vertical-align:middle; margin-left:8px; }
+.rate-fill { height:100%; border-radius:3px; }
+
 @media (max-width:900px) {
   .kpi-grid { grid-template-columns:repeat(2,1fr); }
   .two-col { grid-template-columns:1fr; }
@@ -176,7 +210,9 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
   <div class="tabs">
     <button class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
     <button class="tab" data-tab="ai" onclick="switchTab('ai')">🤖 AI Insights</button>
+    <button class="tab" data-tab="meeting" onclick="switchTab('meeting')">📋 Account Meeting Topics</button>
     <button class="tab" data-tab="detail" onclick="switchTab('detail')">Individual Responses</button>
+    <button class="tab" data-tab="usage" onclick="switchTab('usage')">📊 Usage Trends</button>
   </div>
 </div>
 
@@ -188,20 +224,27 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 
   <div id="overviewTab" class="hidden"></div>
   <div id="aiTab" class="hidden"></div>
+  <div id="meetingTab" class="hidden"></div>
   <div id="detailTab" class="hidden"></div>
+  <div id="usageTab" class="hidden"></div>
 </div>
+
 
 <script>
 // ============================================================
-// CONFIGURATION — SET YOUR GOOGLE SHEET ID HERE
+// CONFIGURATION
 // ============================================================
 const SHEET_ID = "1ycq6Oi9U5ThnisDc0Ij8QYwKmqQiD57O9lTRrb4wskc";
-const SUBMISSIONS_TAB = "Submissions";
-const AI_TAB = "AI_Analysis";
-function sheetCsvUrl(tab) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`; }
+const SUBMISSIONS_GID = "0";
+const AI_TAB_GID = "559870291";
+const MEETING_GID = "MEETING_TAB_GID_HERE"; // Set after first Apps Script run creates the tab
+function sheetCsvUrl(gid) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`; }
 
 // STATE
-let ALL_DATA = [], AI_ANALYSIS = null, currentTab = 'overview', expandedClient = null, dataLoaded = false;
+let ALL_DATA = [], AI_ANALYSIS = null, MEETING_TOPICS = null, currentTab = 'overview', expandedClient = null, dataLoaded = false;
+let aiView = 'all'; // 'all' or a client name
+let aiTimeframe = 'recent'; // 'recent' or 'longer'
+
 const TONE = {1:'Challenging',2:'Stable',3:'Positive',4:'Collaborative'};
 const CONF = {1:'At Risk',2:'Concerning',3:'Stable But Watchful',4:'On Track',5:'Strong'};
 const BW = {1:'Buried',2:'Heavy',3:'Busy',4:'Good',5:'Open'};
@@ -212,24 +255,49 @@ function esc(s){if(!s)return'';const d=document.createElement('div');d.textConte
 function num(v){if(v===null||v===undefined||v==='')return null;const n=Number(v);return isNaN(n)?null:n}
 
 // CSV PARSER
-function parseCsv(text)
-
-{const lines=[];let cur='',inQ=false,row=[];for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(inQ){if(ch==='"'&&nx==='"'){cur+='"';i++}else if(ch==='"')inQ=false;else cur+=ch}else{if(ch==='"')inQ=true;else if(ch===','){row.push(cur.trim());cur=''}else if(ch==='\n'||(ch==='\r'&&nx==='\n')){row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];if(ch==='\r')i++}else cur+=ch}}row.push(cur.trim());if(row.some(c=>c!==''))lines.push(row);return lines}
+function parseCsv(text){const lines=[];let cur='',inQ=false,row=[];for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(inQ){if(ch==='"'&&nx==='"'){cur+='"';i++}else if(ch==='"')inQ=false;else cur+=ch}else{if(ch==='"')inQ=true;else if(ch===','){row.push(cur.trim());cur=''}else if(ch==='\n'||(ch==='\r'&&nx==='\n')){row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];if(ch==='\r')i++}else cur+=ch}}row.push(cur.trim());if(row.some(c=>c!==''))lines.push(row);return lines}
 function csvToObj(text){const lines=parseCsv(text);if(lines.length<2)return[];const hdr=lines[0];return lines.slice(1).map(row=>{const o={};hdr.forEach((h,i)=>{o[h]=row[i]||''});return o})}
 
 // DATA LOADING
 async function loadData(){
   try{
-    updateStatus('loading','Fetching submissions...');
-    const r=await fetch(sheetCsvUrl(SUBMISSIONS_TAB));if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
+    updateStatus('loading','Fetching data...');
+    const r=await fetch(sheetCsvUrl(SUBMISSIONS_GID));if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
     const rows=csvToObj(await r.text());
-    ALL_DATA=rows.map(s=>({consultant:s.ConsultantName||'',client:s.Client||'',industry:s.Industry||'',practiceArea:s.PracticeArea||'',role:s.Role||'',project:s.ProjectDescription||'',status:s.ResponseStatus||'Completed',date:s.SubmissionDate?new Date(s.SubmissionDate):null,clientTone:num(s.ClientTone),engagementConfidence:num(s.EngagementConfidence),bandwidth:num(s.Bandwidth),leadershipKnow:s.LeadershipKnow||'',whatWouldChange:s.WhatWouldChange||'',whatHeard:s.WhatHeard||'',skipReason:s.SkipReason||''})).filter(d=>d.consultant||d.client).sort((a,b)=>(b.date||0)-(a.date||0));
-    try{const ar=await fetch(sheetCsvUrl(AI_TAB));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){const l=aiRows[aiRows.length-1];AI_ANALYSIS={summary:l.Summary||'',themes:l.Themes||'',risks:l.Risks||'',opportunities:l.Opportunities||'',patterns:l.Patterns||'',generatedAt:l.GeneratedAt||''}}}}catch(e){console.warn('AI tab not found:',e.message)}
-    dataLoaded=true;document.getElementById('loadingState').classList.add('hidden');document.getElementById('overviewTab').classList.remove('hidden');
+    ALL_DATA=rows.map(s=>({
+      consultant:s.ConsultantName||'',client:s.Client||'',industry:s.Industry||'',practiceArea:s.PracticeArea||'',
+      role:s.Role||'',project:s.ProjectDescription||'',status:s.ResponseStatus||'Completed',
+      date:s.SubmissionDate?new Date(s.SubmissionDate):null,clientTone:num(s.ClientTone),
+      engagementConfidence:num(s.EngagementConfidence),bandwidth:num(s.Bandwidth),
+      leadershipKnow:s.LeadershipKnow||'',whatWouldChange:s.WhatWouldChange||'',whatHeard:s.WhatHeard||'',
+      skipReason:s.SkipReason||'',manager:s.ManagerEmail||s.Manager||''
+    })).filter(d=>d.consultant||d.client).sort((a,b)=>(b.date||0)-(a.date||0));
+
+    AI_ANALYSIS=null;
+    try{const ar=await fetch(sheetCsvUrl(AI_TAB_GID));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){
+      // Support multi-row: rows may have Client column for per-client analysis
+      AI_ANALYSIS = aiRows.map(r=>({
+        client:r.Client||'All',timeframe:r.Timeframe||'all',
+        summary:r.Summary||'',themes:r.Themes||'',risks:r.Risks||'',
+        opportunities:r.Opportunities||'',patterns:r.Patterns||'',generatedAt:r.GeneratedAt||''
+      }));
+    }}}catch(e){console.warn('AI tab:',e.message)}
+
+    // Load meeting topics from Claude-generated tab
+    MEETING_TOPICS=null;
+    try{
+      if(MEETING_GID&&MEETING_GID!=='MEETING_TAB_GID_HERE'){
+        const mr=await fetch(sheetCsvUrl(MEETING_GID));
+        if(mr.ok){const mtRows=csvToObj(await mr.text());if(mtRows.length>0)MEETING_TOPICS=mtRows}
+      }
+    }catch(e){console.warn('Meeting tab:',e.message)}
+
+    dataLoaded=true;document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('overviewTab').classList.remove('hidden');
     updateStatus('ok',`${ALL_DATA.length} records loaded`);setDateDefaults();populateFilters();render();
   }catch(err){
     console.error(err);
-    document.getElementById('loadingState').innerHTML=`<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
+    document.getElementById('loadingState').innerHTML=`<div style="text-align:center;color:var(--red)"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
     updateStatus('error','Load failed');
   }
 }
@@ -239,325 +307,378 @@ async function refreshData(){const btn=document.getElementById('refreshBtn'),ico
 // ============================================================
 // DATE & FILTERS
 // ============================================================
-function setDateDefaults() {
-  const dates = ALL_DATA.filter(d => d.date).map(d => d.date);
-  if (!dates.length) return;
-  const maxD = new Date(Math.max(...dates));
-  const minD = new Date(Math.min(...dates));
-  const fourWeeks = new Date(maxD); fourWeeks.setDate(fourWeeks.getDate() - 28);
-  const from = fourWeeks > minD ? fourWeeks : minD;
-  document.getElementById('dateFrom').value = fmt(from);
-  document.getElementById('dateTo').value = fmt(maxD);
-}
+function setDateDefaults(){const dates=ALL_DATA.filter(d=>d.date).map(d=>d.date);if(!dates.length)return;const maxD=new Date(Math.max(...dates)),minD=new Date(Math.min(...dates));const fw=new Date(maxD);fw.setDate(fw.getDate()-28);const from=fw>minD?fw:minD;document.getElementById('dateFrom').value=fmt(from);document.getElementById('dateTo').value=fmt(maxD)}
+function fmt(d){return d.toISOString().split('T')[0]}
 
-function fmt(d) { return d.toISOString().split('T')[0]; }
-
-function getFiltered() {
-  const from = document.getElementById('dateFrom').value ? new Date(document.getElementById('dateFrom').value + 'T00:00:00') : null;
-  const to = document.getElementById('dateTo').value ? new Date(document.getElementById('dateTo').value + 'T23:59:59') : null;
-  const fi = document.getElementById('fI').value;
-  const fp = document.getElementById('fP').value;
-  const fc = document.getElementById('fC').value;
-  const fprj = document.getElementById('fPrj').value;
-  const fr = document.getElementById('fR').value;
-
-  let d = [...ALL_DATA];
-  if (from) d = d.filter(r => r.date && r.date >= from);
-  if (to) d = d.filter(r => r.date && r.date <= to);
-  const total = d.length;
-  if (fi !== 'All') d = d.filter(r => r.industry === fi);
-  if (fp !== 'All') d = d.filter(r => r.practiceArea === fp);
-  if (fc !== 'All') d = d.filter(r => r.client === fc);
-  if (fprj !== 'All') d = d.filter(r => r.project === fprj);
-  if (fr !== 'All') d = d.filter(r => r.role === fr);
-
-  const anyF = fi !== 'All' || fp !== 'All' || fc !== 'All' || fprj !== 'All' || fr !== 'All';
-  document.getElementById('clearBtn').classList.toggle('hidden', !anyF);
-  const info = document.getElementById('filterInfo');
-  if (anyF) { info.classList.remove('hidden'); info.textContent = `Showing ${d.length} of ${total} in range`; }
-  else { info.classList.add('hidden'); }
+function getFiltered(){
+  const from=document.getElementById('dateFrom').value?new Date(document.getElementById('dateFrom').value+'T00:00:00'):null;
+  const to=document.getElementById('dateTo').value?new Date(document.getElementById('dateTo').value+'T23:59:59'):null;
+  const fi=document.getElementById('fI').value,fp=document.getElementById('fP').value,fc=document.getElementById('fC').value,fprj=document.getElementById('fPrj').value,fr=document.getElementById('fR').value;
+  let d=[...ALL_DATA];
+  if(from)d=d.filter(r=>r.date&&r.date>=from);if(to)d=d.filter(r=>r.date&&r.date<=to);
+  const total=d.length;
+  if(fi!=='All')d=d.filter(r=>r.industry===fi);if(fp!=='All')d=d.filter(r=>r.practiceArea===fp);
+  if(fc!=='All')d=d.filter(r=>r.client===fc);if(fprj!=='All')d=d.filter(r=>r.project===fprj);
+  if(fr!=='All')d=d.filter(r=>r.role===fr);
+  const anyF=fi!=='All'||fp!=='All'||fc!=='All'||fprj!=='All'||fr!=='All';
+  document.getElementById('clearBtn').classList.toggle('hidden',!anyF);
+  const info=document.getElementById('filterInfo');
+  if(anyF){info.classList.remove('hidden');info.textContent=`Showing ${d.length} of ${total} in range`}else info.classList.add('hidden');
   return d;
 }
-
-function populateFilters() {
-  [{ id:'fI', k:'industry' }, { id:'fP', k:'practiceArea' }, { id:'fC', k:'client' }, { id:'fPrj', k:'project' }, { id:'fR', k:'role' }].forEach(f => {
-    const sel = document.getElementById(f.id);
-    const vals = [...new Set(ALL_DATA.map(d => d[f.k]).filter(Boolean))].sort();
-    sel.innerHTML = '<option>All</option>' + vals.map(v => `<option>${esc(v)}</option>`).join('');
-  });
-}
-
-function clearFilters() {
-  ['fI','fP','fC','fPrj','fR'].forEach(id => document.getElementById(id).value = 'All');
-  render();
-}
+function populateFilters(){[{id:'fI',k:'industry'},{id:'fP',k:'practiceArea'},{id:'fC',k:'client'},{id:'fPrj',k:'project'},{id:'fR',k:'role'}].forEach(f=>{const sel=document.getElementById(f.id);const vals=[...new Set(ALL_DATA.map(d=>d[f.k]).filter(Boolean))].sort();sel.innerHTML='<option>All</option>'+vals.map(v=>`<option>${esc(v)}</option>`).join('')})}
+function clearFilters(){['fI','fP','fC','fPrj','fR'].forEach(id=>document.getElementById(id).value='All');render()}
 
 // ============================================================
 // TABS
 // ============================================================
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  ['overviewTab','aiTab','detailTab'].forEach(id => document.getElementById(id).classList.add('hidden'));
-  document.getElementById(tab + 'Tab').classList.remove('hidden');
-  render();
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  ['overviewTab','aiTab','meetingTab','detailTab','usageTab'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById(tab+'Tab').classList.remove('hidden');render();
 }
 
 // ============================================================
-// SPARKLINES
+// SPARKLINES & LINE CHARTS
 // ============================================================
-function spark(points, color) {
-  if (!points || points.length < 2) return '';
-  const h = 28, w = 120, pad = 4;
-  const min = Math.min(...points) * 0.9, max = Math.max(...points) * 1.1 || 1, range = max - min || 1;
-  const coords = points.map((v, i) => ({
-    x: pad + (i / (points.length - 1)) * (w - pad * 2),
-    y: h - pad - ((v - min) / range) * (h - pad * 2)
-  }));
-  const line = coords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
-  const area = line + ` L${coords[coords.length-1].x.toFixed(1)},${h} L${coords[0].x.toFixed(1)},${h} Z`;
-  const last = coords[coords.length - 1];
-  return `<div class="sparkline-wrap"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
-    <path d="${area}" fill="${color}" class="spark-area"/>
-    <path d="${line}" stroke="${color}" class="spark-line"/>
-    <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="3" fill="${color}"/>
-  </svg></div>`;
-}
+function spark(pts,color){if(!pts||pts.length<2)return'';const h=28,w=120,pad=4;const mn=Math.min(...pts)*0.9,mx=Math.max(...pts)*1.1||1,rng=mx-mn||1;const coords=pts.map((v,i)=>({x:pad+(i/(pts.length-1))*(w-pad*2),y:h-pad-((v-mn)/rng)*(h-pad*2)}));const line=coords.map((c,i)=>`${i===0?'M':'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');const area=line+` L${coords[coords.length-1].x.toFixed(1)},${h} L${coords[0].x.toFixed(1)},${h} Z`;const last=coords[coords.length-1];return`<div class="sparkline-wrap"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${area}" fill="${color}" class="spark-area"/><path d="${line}" stroke="${color}" class="spark-line"/><circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="3" fill="${color}"/></svg></div>`}
 
-function weeklyAvg(data, field) {
-  const weeks = {};
-  data.forEach(d => {
-    if (!d.date || d.status !== 'Completed') return;
-    const wk = weekKey(d.date);
-    if (!weeks[wk]) weeks[wk] = [];
-    const val = d[field];
-    if (val !== null && val !== undefined) weeks[wk].push(val);
+function lineChart(points, labels, color, height){
+  if(!points||points.length<2)return'<div style="color:var(--text3);font-size:12px;padding:20px;text-align:center">Not enough data for chart</div>';
+  const h=height||120,w=500,pad=30,padR=10,padB=20;
+  const mn=Math.min(...points)*0.9,mx=Math.max(...points)*1.1||1,rng=mx-mn||1;
+  const coords=points.map((v,i)=>({x:pad+(i/(points.length-1))*(w-pad-padR),y:h-padB-((v-mn)/rng)*(h-padB-10)}));
+  const line=coords.map((c,i)=>`${i===0?'M':'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+  const area=line+` L${coords[coords.length-1].x.toFixed(1)},${h-padB} L${coords[0].x.toFixed(1)},${h-padB} Z`;
+  let svg=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px">`;
+  // Grid lines
+  for(let i=0;i<4;i++){const y=10+(i/3)*(h-padB-10);svg+=`<line x1="${pad}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`}
+  svg+=`<path d="${area}" fill="${color}" opacity="0.1"/>`;
+  svg+=`<path d="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  coords.forEach((c,i)=>{svg+=`<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="3" fill="${color}"/>`;
+    if(labels&&labels[i]){svg+=`<text x="${c.x.toFixed(1)}" y="${h-4}" text-anchor="middle" fill="var(--text3)" font-size="9" font-family="var(--mono)">${labels[i]}</text>`}
   });
-  return Object.keys(weeks).sort().map(wk => weeks[wk].length ? weeks[wk].reduce((a, b) => a + b, 0) / weeks[wk].length : null).filter(v => v !== null);
+  // Y-axis labels
+  svg+=`<text x="${pad-4}" y="14" text-anchor="end" fill="var(--text3)" font-size="9" font-family="var(--mono)">${mx.toFixed(mx>=10?0:1)}</text>`;
+  svg+=`<text x="${pad-4}" y="${h-padB}" text-anchor="end" fill="var(--text3)" font-size="9" font-family="var(--mono)">${mn.toFixed(mn>=10?0:1)}</text>`;
+  svg+='</svg>';
+  return svg;
 }
 
-function weeklyCounts(data) {
-  const weeks = {};
-  data.forEach(d => { if (!d.date) return; const wk = weekKey(d.date); weeks[wk] = (weeks[wk] || 0) + (d.status === 'Completed' ? 1 : 0); });
-  return Object.keys(weeks).sort().map(wk => weeks[wk]);
-}
-
-function weekKey(date) {
-  const d = new Date(date); d.setHours(0,0,0,0);
-  d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-  const w1 = new Date(d.getFullYear(), 0, 4);
-  const wn = 1 + Math.round(((d - w1) / 86400000 - 3 + (w1.getDay() + 6) % 7) / 7);
-  return `${d.getFullYear()}-W${String(wn).padStart(2, '0')}`;
-}
-
-function delta(points) {
-  if (!points || points.length < 2) return '';
-  const d = points[points.length - 1] - points[points.length - 2];
-  if (Math.abs(d) < 0.05) return '<span class="kpi-desc" style="background:var(--border);color:var(--text2)">→ Flat</span>';
-  const up = d > 0;
-  return `<span class="kpi-desc" style="background:${up ? 'var(--green-bg)' : 'var(--red-bg)'};color:${up ? 'var(--green)' : 'var(--red)'}">${up ? '↑' : '↓'} ${Math.abs(d).toFixed(1)}</span>`;
-}
+function weeklyAvg(data,field){const weeks={};data.forEach(d=>{if(!d.date||d.status!=='Completed')return;const wk=weekKey(d.date);if(!weeks[wk])weeks[wk]=[];const val=d[field];if(val!==null&&val!==undefined)weeks[wk].push(val)});return Object.keys(weeks).sort().map(wk=>weeks[wk].length?weeks[wk].reduce((a,b)=>a+b,0)/weeks[wk].length:null).filter(v=>v!==null)}
+function weeklyCounts(data){const weeks={};data.forEach(d=>{if(!d.date)return;const wk=weekKey(d.date);weeks[wk]=(weeks[wk]||0)+(d.status==='Completed'?1:0)});return Object.keys(weeks).sort().map(wk=>weeks[wk])}
+function weeklyLabels(data){const weeks={};data.forEach(d=>{if(!d.date)return;weeks[weekKey(d.date)]=1});return Object.keys(weeks).sort()}
+function weekKey(date){const d=new Date(date);d.setHours(0,0,0,0);d.setDate(d.getDate()+3-(d.getDay()+6)%7);const w1=new Date(d.getFullYear(),0,4);const wn=1+Math.round(((d-w1)/86400000-3+(w1.getDay()+6)%7)/7);return`W${String(wn).padStart(2,'0')}`}
+function delta(pts){if(!pts||pts.length<2)return'';const d=pts[pts.length-1]-pts[pts.length-2];if(Math.abs(d)<0.05)return'<span class="kpi-desc" style="background:var(--border);color:var(--text2)">→ Flat</span>';const up=d>0;return`<span class="kpi-desc" style="background:${up?'var(--green-bg)':'var(--red-bg)'};color:${up?'var(--green)':'var(--red)'}">${up?'↑':'↓'} ${Math.abs(d).toFixed(1)}</span>`}
 
 // ============================================================
-// OVERVIEW
+// OVERVIEW — updated: no practice area column, responses = completed only (no denominator), skip summary moved to Usage
 // ============================================================
-function renderOverview() {
-  const all = getFiltered();
-  const comp = all.filter(d => d.status === 'Completed');
-  const skip = all.filter(d => d.status === 'Skipped');
+function renderOverview(){
+  const all=getFiltered();
+  const comp=all.filter(d=>d.status==='Completed');
+  const avgT=avg(comp,'clientTone'),avgC=avg(comp,'engagementConfidence'),avgB=avg(comp,'bandwidth');
+  const tT=weeklyAvg(all,'clientTone'),tC=weeklyAvg(all,'engagementConfidence'),tB=weeklyAvg(all,'bandwidth'),tN=weeklyCounts(all);
 
-  const avgT = avg(comp, 'clientTone');
-  const avgC = avg(comp, 'engagementConfidence');
-  const avgB = avg(comp, 'bandwidth');
+  let h='<div class="kpi-grid">';
+  // Responses — completed only, no denominator
+  h+=`<div class="kpi-card"><div class="kpi-bar" style="background:var(--blue)"></div>
+    <div class="kpi-label">Completed Responses</div>
+    <div class="kpi-value">${comp.length}</div>
+    <div class="kpi-sub">In selected date range</div>${spark(tN,'#3b82f6')}</div>`;
+  h+=kpiCard('Avg Client Tone',avgT,4,TONE,tT,'var(--teal)');
+  h+=kpiCard('Avg Confidence',avgC,5,CONF,tC,'var(--purple)');
+  h+=kpiCard('Avg Bandwidth',avgB,5,BW,tB,'var(--blue)');
+  h+='</div>';
 
-  const tT = weeklyAvg(all, 'clientTone'), tC = weeklyAvg(all, 'engagementConfidence'), tB = weeklyAvg(all, 'bandwidth'), tN = weeklyCounts(all);
+  // CLIENT TABLE — removed Practice Area column
+  const gMap={};comp.forEach(d=>{if(!gMap[d.client])gMap[d.client]={client:d.client,industry:d.industry,rows:[]};gMap[d.client].rows.push(d)});
+  const groups=Object.values(gMap).sort((a,b)=>a.client.localeCompare(b.client));
 
-  let h = '<div class="kpi-grid">';
-
-  // Responses
-  h += `<div class="kpi-card"><div class="kpi-bar" style="background:var(--blue)"></div>
-    <div class="kpi-label">Responses</div>
-    <div class="kpi-value">${comp.length} <span style="font-size:16px;color:var(--text3)">/ ${all.length}</span></div>
-    <div class="kpi-sub">${skip.length > 0 ? skip.length + ' skipped' : 'All responded'}</div>${spark(tN, '#3b82f6')}</div>`;
-
-  // Client Tone
-  h += kpiCard('Avg Client Tone', avgT, 4, TONE, tT, 'var(--teal)');
-  // Confidence
-  h += kpiCard('Avg Confidence', avgC, 5, CONF, tC, 'var(--purple)');
-  // Bandwidth
-  h += kpiCard('Avg Bandwidth', avgB, 5, BW, tB, 'var(--blue)');
-
-  h += '</div>';
-
-  // CLIENT TABLE
-  const gMap = {};
-  comp.forEach(d => { if (!gMap[d.client]) gMap[d.client] = { client: d.client, industry: d.industry, practiceArea: d.practiceArea, rows: [] }; gMap[d.client].rows.push(d); });
-  const groups = Object.values(gMap).sort((a, b) => a.client.localeCompare(b.client));
-
-  h += `<div class="card"><div class="card-header"><h3>Client Engagement Health</h3><span class="card-sub">${groups.length} client${groups.length !== 1 ? 's' : ''} • Click to expand projects</span></div>`;
-
-  if (!groups.length) { h += '<div class="empty">No completed responses in range.</div>'; }
-  else {
-    h += '<table><thead><tr><th>Client</th><th>Industry</th><th>Practice Area</th><th>Responses</th><th>Avg Tone</th><th>Avg Confidence</th><th>Avg Bandwidth</th></tr></thead><tbody>';
-    groups.forEach(g => {
-      const at = avg(g.rows, 'clientTone'), ac = avg(g.rows, 'engagementConfidence'), ab = avg(g.rows, 'bandwidth');
-      const isExp = expandedClient === g.client;
-      h += `<tr class="crow${isExp ? ' exp' : ''}" onclick="toggleClient('${esc(g.client).replace(/'/g, "\\'")}')">
-        <td style="font-weight:600;color:var(--text)"><span style="font-size:10px;color:var(--text3);margin-right:8px">${isExp ? '▼' : '▶'}</span>${esc(g.client)}</td>
-        <td>${esc(g.industry)}</td><td>${esc(g.practiceArea)}</td>
+  h+=`<div class="card"><div class="card-header"><h3>Client Engagement Health</h3><span class="card-sub">${groups.length} client${groups.length!==1?'s':''} • Click to expand projects</span></div>`;
+  if(!groups.length)h+='<div class="empty">No completed responses in range.</div>';
+  else{
+    h+='<table><thead><tr><th>Client</th><th>Industry</th><th>Responses</th><th>Avg Tone</th><th>Avg Confidence</th><th>Avg Bandwidth</th></tr></thead><tbody>';
+    groups.forEach(g=>{
+      const at=avg(g.rows,'clientTone'),ac=avg(g.rows,'engagementConfidence'),ab=avg(g.rows,'bandwidth');
+      const isExp=expandedClient===g.client;
+      h+=`<tr class="crow${isExp?' exp':''}" onclick="toggleClient('${esc(g.client).replace(/'/g,"\\'")}')">
+        <td style="font-weight:600;color:var(--text)"><span style="font-size:10px;color:var(--text3);margin-right:8px">${isExp?'▼':'▶'}</span>${esc(g.client)}</td>
+        <td>${esc(g.industry)}</td>
         <td style="font-family:var(--mono);font-weight:600;color:var(--text)">${g.rows.length}</td>
-        ${scaleCell(at, 4, TONE)}${scaleCell(ac, 5, CONF)}${scaleCell(ab, 5, BW)}
-      </tr>`;
-
-      if (isExp) {
-        const projMap = {};
-        g.rows.forEach(d => { const pk = d.project || '(No project)'; if (!projMap[pk]) projMap[pk] = []; projMap[pk].push(d); });
-        h += `<tr><td colspan="7" style="padding:0"><div class="expand-inner"><div class="expand-lbl">Projects — ${esc(g.client)}</div>`;
-        Object.entries(projMap).forEach(([proj, pData]) => {
-          const pt = avg(pData, 'clientTone'), pc = avg(pData, 'engagementConfidence'), pb = avg(pData, 'bandwidth');
-          const names = [...new Set(pData.map(d => d.consultant))];
-          h += `<div class="proj-card"><div class="proj-top">
-            <div class="proj-name">${esc(proj)}</div>
-            <div class="proj-badges">
-              <span class="mini-pill" style="background:var(--teal-bg);color:var(--teal)">${pData.length} response${pData.length > 1 ? 's' : ''}</span>
-              <span style="font-size:11px;color:var(--text3)">${names.length} consultant${names.length > 1 ? 's' : ''}: ${names.map(c => esc(c.split(' ')[0])).join(', ')}</span>
-            </div></div>
-            <div class="proj-metrics">
-              <div><div class="proj-metric-label">Client Tone</div><div class="proj-metric-val" style="color:${pt !== null ? scaleColor(pt, 4) : 'var(--text3)'}">${pt !== null ? pt.toFixed(1) + ' ' + lbl(pt, TONE) : '—'}</div></div>
-              <div><div class="proj-metric-label">Confidence</div><div class="proj-metric-val" style="color:${pc !== null ? scaleColor(pc, 5) : 'var(--text3)'}">${pc !== null ? pc.toFixed(1) + ' ' + lbl(pc, CONF) : '—'}</div></div>
-              <div><div class="proj-metric-label">Bandwidth</div><div class="proj-metric-val" style="color:${pb !== null ? scaleColor(pb, 5) : 'var(--text3)'}">${pb !== null ? pb.toFixed(1) + ' ' + lbl(pb, BW) : '—'}</div></div>
-            </div></div>`;
+        ${scaleCell(at,4,TONE)}${scaleCell(ac,5,CONF)}${scaleCell(ab,5,BW)}</tr>`;
+      if(isExp){
+        const projMap={};g.rows.forEach(d=>{const pk=d.project||'(No project)';if(!projMap[pk])projMap[pk]=[];projMap[pk].push(d)});
+        h+=`<tr><td colspan="6" style="padding:0"><div class="expand-inner"><div class="expand-lbl">Projects — ${esc(g.client)}</div>`;
+        Object.entries(projMap).forEach(([proj,pData])=>{
+          const pt=avg(pData,'clientTone'),pc=avg(pData,'engagementConfidence'),pb=avg(pData,'bandwidth');
+          const names=[...new Set(pData.map(d=>d.consultant))];
+          h+=`<div class="proj-card"><div class="proj-top"><div class="proj-name">${esc(proj)}</div><div class="proj-badges"><span class="mini-pill" style="background:var(--teal-bg);color:var(--teal)">${pData.length} response${pData.length>1?'s':''}</span><span style="font-size:11px;color:var(--text3)">${names.length} consultant${names.length>1?'s':''}: ${names.map(c=>esc(c.split(' ')[0])).join(', ')}</span></div></div><div class="proj-metrics"><div><div class="proj-metric-label">Client Tone</div><div class="proj-metric-val" style="color:${pt!==null?scaleColor(pt,4):'var(--text3)'}">${pt!==null?pt.toFixed(1)+' '+lbl(pt,TONE):'—'}</div></div><div><div class="proj-metric-label">Confidence</div><div class="proj-metric-val" style="color:${pc!==null?scaleColor(pc,5):'var(--text3)'}">${pc!==null?pc.toFixed(1)+' '+lbl(pc,CONF):'—'}</div></div><div><div class="proj-metric-label">Bandwidth</div><div class="proj-metric-val" style="color:${pb!==null?scaleColor(pb,5):'var(--text3)'}">${pb!==null?pb.toFixed(1)+' '+lbl(pb,BW):'—'}</div></div></div></div>`;
         });
-        h += '</div></td></tr>';
+        h+='</div></td></tr>';
       }
     });
-    h += '</tbody></table>';
+    h+='</tbody></table>';
   }
-  h += '</div>';
-
-  // SKIP SUMMARY
-  if (skip.length > 0) {
-    h += `<div class="skip-summary"><div class="card-header"><h3>Skip Summary</h3><span class="card-sub">${skip.length} skipped</span></div>`;
-    skip.forEach(d => {
-      h += `<div class="skip-row"><span style="font-weight:600;color:var(--text);min-width:140px">${esc(d.consultant)}</span>
-        <span style="color:var(--text3);min-width:120px">${esc(d.client)}</span>
-        <span style="color:var(--text2)">${esc(d.skipReason || 'No reason given')}</span>
-        <span style="color:var(--text3);margin-left:auto;font-size:12px">${d.date ? d.date.toLocaleDateString() : ''}</span></div>`;
-    });
-    h += '</div>';
-  }
-
-  document.getElementById('overviewTab').innerHTML = h;
+  h+='</div>';
+  document.getElementById('overviewTab').innerHTML=h;
 }
 
-// Helpers
-function avg(rows, field) {
-  const vals = rows.map(d => d[field]).filter(v => v !== null && v !== undefined);
-  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
-}
-
-function kpiCard(label, val, max, map, trend, color) {
-  if (val === null) return `<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div>
-    <div class="kpi-label">${label}</div><div class="kpi-value">—</div><div class="kpi-sub">No data</div></div>`;
-  const c = scaleColor(val, max);
-  return `<div class="kpi-card"><div class="kpi-bar" style="background:${c}"></div>
-    <div class="kpi-label">${label} ${delta(trend)}</div>
-    <div class="kpi-value"><span style="color:${c}">${val.toFixed(1)}</span></div>
-    <div class="kpi-sub" style="color:${c};font-weight:600">${lbl(val, map)}</div>
-    ${spark(trend, color || c)}</div>`;
-}
-
-function scaleCell(val, max, map) {
-  if (val === null) return '<td><span style="color:var(--text3)">—</span></td>';
-  return `<td><span style="color:${scaleColor(val, max)};font-weight:600;font-family:var(--mono)">${val.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${lbl(val, map)}</span></td>`;
-}
-
-function toggleClient(c) { expandedClient = expandedClient === c ? null : c; render(); }
+function avg(rows,field){const vals=rows.map(d=>d[field]).filter(v=>v!==null&&v!==undefined);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+function kpiCard(label,val,max,map,trend,color){if(val===null)return`<div class="kpi-card"><div class="kpi-bar" style="background:var(--text3)"></div><div class="kpi-label">${label}</div><div class="kpi-value">—</div><div class="kpi-sub">No data</div></div>`;const c=scaleColor(val,max);return`<div class="kpi-card"><div class="kpi-bar" style="background:${c}"></div><div class="kpi-label">${label} ${delta(trend)}</div><div class="kpi-value"><span style="color:${c}">${val.toFixed(1)}</span></div><div class="kpi-sub" style="color:${c};font-weight:600">${lbl(val,map)}</div>${spark(trend,color||c)}</div>`}
+function scaleCell(val,max,map){if(val===null)return'<td><span style="color:var(--text3)">—</span></td>';return`<td><span style="color:${scaleColor(val,max)};font-weight:600;font-family:var(--mono)">${val.toFixed(1)}</span> <span style="font-size:11px;color:var(--text3)">${lbl(val,map)}</span></td>`}
+function toggleClient(c){expandedClient=expandedClient===c?null:c;render()}
 
 // ============================================================
-// AI INSIGHTS
+// AI INSIGHTS — with client sub-tabs and timeframe toggle
 // ============================================================
-function renderAI() {
-  let h = `<div class="ai-banner">
-    <span style="font-size:22px">🤖</span>
-    <div>
-      <div style="font-size:14px;font-weight:600;color:var(--purple)">AI-Powered Analysis</div>
-      <div style="font-size:12px;color:var(--text3)">Generated by Claude via Google Apps Script • Updates automatically on Tuesdays</div>
-    </div>
-  </div>`;
+function renderAI(){
+  const clients=[...new Set(ALL_DATA.filter(d=>d.status==='Completed').map(d=>d.client))].sort();
+  let h=`<div class="ai-banner"><span style="font-size:22px">🤖</span><div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--purple)">AI-Powered Analysis</div><div style="font-size:12px;color:var(--text3)">Generated by Claude via Google Apps Script • Updates on Tuesdays</div></div></div>`;
 
-  if (!AI_ANALYSIS) {
-    h += `<div class="empty" style="padding:40px">
-      <div style="font-size:16px;color:var(--text2);margin-bottom:8px">No AI analysis available yet</div>
-      <div style="color:var(--text3)">The Google Apps Script will generate AI insights on its weekly schedule.<br>
-      You can also run it manually from the Ops Pulse menu in your Google Sheet.</div>
-    </div>`;
+  // Client sub-tabs
+  h+='<div class="ai-subtabs">';
+  h+=`<button class="ai-subtab${aiView==='all'?' active':''}" onclick="aiView='all';render()">All Accounts</button>`;
+  clients.forEach(c=>{h+=`<button class="ai-subtab${aiView===c?' active':''}" onclick="aiView='${esc(c).replace(/'/g,"\\'")}';render()">${esc(c)}</button>`});
+  h+='</div>';
+
+  // Timeframe toggle
+  h+='<div class="ai-timeframe">';
+  h+=`<button class="ai-tf-btn${aiTimeframe==='recent'?' active':''}" onclick="aiTimeframe='recent';render()">Recent (Last 3 Submissions)</button>`;
+  h+=`<button class="ai-tf-btn${aiTimeframe==='longer'?' active':''}" onclick="aiTimeframe='longer';render()">Longer Term (Last 3 Months)</button>`;
+  h+='</div>';
+
+  if(!AI_ANALYSIS||!AI_ANALYSIS.length){
+    h+=`<div class="empty" style="padding:40px"><div style="font-size:16px;color:var(--text2);margin-bottom:8px">No AI analysis available yet</div><div style="color:var(--text3)">Run the Apps Script analysis from your Google Sheet (Ops Pulse menu → Run AI Analysis Now).</div></div>`;
   } else {
-    const a = typeof AI_ANALYSIS === 'string' ? { summary: AI_ANALYSIS } : AI_ANALYSIS;
-    if (a.summary) h += `<div class="card"><div class="ai-section-title">📋 Executive Summary</div><div class="ai-prose">${fmtAI(a.summary)}</div></div>`;
-    h += '<div class="two-col">';
-    if (a.themes) h += `<div class="card"><div class="ai-section-title">🏷 Key Themes</div><div class="ai-prose">${fmtAI(a.themes)}</div></div>`;
-    if (a.risks) h += `<div class="card"><div class="ai-section-title">🚨 Risks & Mismatches</div><div class="ai-prose">${fmtAI(a.risks)}</div></div>`;
-    h += '</div><div class="two-col">';
-    if (a.opportunities) h += `<div class="card"><div class="ai-section-title">💡 Opportunities</div><div class="ai-prose">${fmtAI(a.opportunities)}</div></div>`;
-    if (a.patterns) h += `<div class="card"><div class="ai-section-title">📈 Trends & Patterns</div><div class="ai-prose">${fmtAI(a.patterns)}</div></div>`;
-    h += '</div>';
-    if (a.generatedAt) h += `<div style="text-align:right;font-size:11px;color:var(--text3)">Analysis generated ${new Date(a.generatedAt).toLocaleString()}</div>`;
-  }
+    // Find matching analysis row
+    const targetClient=aiView==='all'?'All':aiView;
+    const targetTf=aiTimeframe;
+    let match=AI_ANALYSIS.find(a=>a.client===targetClient&&a.timeframe===targetTf);
+    // Fallback: try any match for this client, then fall back to All
+    if(!match)match=AI_ANALYSIS.find(a=>a.client===targetClient);
+    if(!match)match=AI_ANALYSIS.find(a=>a.client==='All'&&a.timeframe===targetTf);
+    if(!match)match=AI_ANALYSIS[0];
 
-  document.getElementById('aiTab').innerHTML = h;
+    if(match&&match.summary){
+      if(match.summary)h+=`<div class="card"><div class="ai-section-title">📋 Executive Summary</div><div class="ai-prose">${fmtAI(match.summary)}</div></div>`;
+      h+='<div class="two-col">';
+      if(match.themes)h+=`<div class="card"><div class="ai-section-title">🏷 Key Themes</div><div class="ai-prose">${fmtAI(match.themes)}</div></div>`;
+      if(match.risks)h+=`<div class="card"><div class="ai-section-title">🚨 Risks & Mismatches</div><div class="ai-prose">${fmtAI(match.risks)}</div></div>`;
+      h+='</div><div class="two-col">';
+      if(match.opportunities)h+=`<div class="card"><div class="ai-section-title">💡 Opportunities</div><div class="ai-prose">${fmtAI(match.opportunities)}</div></div>`;
+      if(match.patterns)h+=`<div class="card"><div class="ai-section-title">📈 Trends & Patterns</div><div class="ai-prose">${fmtAI(match.patterns)}</div></div>`;
+      h+='</div>';
+      if(match.generatedAt)h+=`<div style="text-align:right;font-size:11px;color:var(--text3)">Analysis generated ${match.generatedAt}</div>`;
+    } else {
+      h+=`<div class="empty">No analysis available for ${aiView==='all'?'all accounts':esc(aiView)} (${aiTimeframe}). Run the Apps Script to generate.</div>`;
+    }
+  }
+  document.getElementById('aiTab').innerHTML=h;
 }
 
-function fmtAI(text) {
-  if (!text) return '';
-  return esc(text)
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text)">$1</strong>')
-    .replace(/\n\n/g, '</p><p class="ai-prose">')
-    .replace(/\n- /g, '<br>• ')
-    .replace(/\n/g, '<br>');
+function fmtAI(text){if(!text)return'';return esc(text).replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text)">$1</strong>').replace(/\n\n/g,'</p><p class="ai-prose">').replace(/\n- /g,'<br>• ').replace(/\n• /g,'<br>• ').replace(/\n/g,'<br>')}
+
+// ============================================================
+// ACCOUNT MEETING TOPICS — Claude-generated, read from Meeting_Topics sheet tab
+// ============================================================
+function renderMeeting(){
+  const clients=[...new Set(ALL_DATA.filter(d=>d.status==='Completed').map(d=>d.client))].sort();
+
+  let h='<div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">';
+  h+='<label style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">Show Accounts:</label>';
+  h+='<select id="meetingClientSelect" class="meeting-client-select" onchange="render()" multiple size="1" style="min-height:33px">';
+  h+='<option value="All" selected>All Accounts</option>';
+  clients.forEach(c=>{h+=`<option value="${esc(c)}">${esc(c)}</option>`});
+  h+='</select>';
+  h+='<span style="font-size:11px;color:var(--text3)">Hold Ctrl/Cmd to select multiple</span>';
+  h+='</div>';
+
+  const sel=document.getElementById('meetingClientSelect');
+  let selectedClients=clients;
+  if(sel){const chosen=[...sel.selectedOptions].map(o=>o.value);if(!chosen.includes('All'))selectedClients=chosen}
+
+  if(!MEETING_TOPICS||!MEETING_TOPICS.length){
+    // Fallback: if no Claude-generated topics, build from raw data
+    h+=renderMeetingFallback(selectedClients);
+    document.getElementById('meetingTab').innerHTML=h;return;
+  }
+
+  // Filter topics to selected clients
+  const filtered=MEETING_TOPICS.filter(t=>{
+    const tc=t.Client||t.client||'';
+    return selectedClients.includes(tc);
+  });
+
+  if(!filtered.length){
+    h+='<div class="empty">No meeting topics for the selected accounts. Run AI Analysis from the Google Sheet to generate topics.</div>';
+    document.getElementById('meetingTab').innerHTML=h;return;
+  }
+
+  // Group by client
+  const byClient={};
+  filtered.forEach(t=>{const c=t.Client||t.client;if(!byClient[c])byClient[c]=[];byClient[c].push(t)});
+
+  Object.entries(byClient).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([client,topics])=>{
+    h+=`<div class="card"><h3 style="margin-bottom:16px">${esc(client)}</h3>`;
+
+    // Split into new vs older
+    const newTopics=topics.filter(t=>(t.Recency||t.recency||'')==='new');
+    const olderTopics=topics.filter(t=>(t.Recency||t.recency||'')!=='new');
+
+    if(newTopics.length){
+      h+='<div class="topic-group"><span class="topic-label topic-new">New — Last 2.5 Weeks</span>';
+      newTopics.forEach(t=>{
+        const proj=t.Project||t.project||'';
+        const heading=t.TopicHeading||t.topicHeading||t.Topic||t.topic||'';
+        h+=`<div class="topic-item"><div class="topic-project">${esc(proj)}</div>• ${esc(heading)}</div>`;
+      });
+      h+='</div>';
+    }
+    if(olderTopics.length){
+      h+='<div class="topic-group" style="margin-top:12px"><span class="topic-label topic-older">Earlier — 2.5 to 5 Weeks Ago</span>';
+      olderTopics.forEach(t=>{
+        const proj=t.Project||t.project||'';
+        const heading=t.TopicHeading||t.topicHeading||t.Topic||t.topic||'';
+        h+=`<div class="topic-item"><div class="topic-project">${esc(proj)}</div>• ${esc(heading)}</div>`;
+      });
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+
+  document.getElementById('meetingTab').innerHTML=h;
+}
+
+// Fallback if Claude topics not yet generated — simple version from raw data
+function renderMeetingFallback(selectedClients){
+  const now=new Date();const fiveWeeksAgo=new Date(now);fiveWeeksAgo.setDate(fiveWeeksAgo.getDate()-35);
+  const twoHalfWeeksAgo=new Date(now);twoHalfWeeksAgo.setDate(twoHalfWeeksAgo.getDate()-18);
+  const recent=ALL_DATA.filter(d=>d.status==='Completed'&&d.date&&d.date>=fiveWeeksAgo&&selectedClients.includes(d.client));
+  if(!recent.length)return'<div class="empty">No submissions in the last 5 weeks. Run AI Analysis from Google Sheet to generate Claude-powered topics.</div>';
+
+  let h='<div style="padding:12px 16px;background:var(--surface2);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--text3)">💡 These are raw submission summaries. Run the Apps Script AI Analysis to generate curated discussion topics powered by Claude.</div>';
+  const byClient={};recent.forEach(d=>{if(!byClient[d.client])byClient[d.client]=[];byClient[d.client].push(d)});
+  Object.entries(byClient).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([client,items])=>{
+    const topics=items.filter(d=>(d.leadershipKnow&&d.leadershipKnow.length>10)||(d.whatWouldChange&&d.whatWouldChange.length>10)||(d.whatHeard&&d.whatHeard.length>10)||(d.clientTone&&d.clientTone<=2)||(d.engagementConfidence&&d.engagementConfidence<=2));
+    if(!topics.length)return;
+    h+=`<div class="card"><h3 style="margin-bottom:12px">${esc(client)}</h3>`;
+    const newT=topics.filter(d=>d.date>=twoHalfWeeksAgo),oldT=topics.filter(d=>d.date<twoHalfWeeksAgo);
+    if(newT.length){h+='<span class="topic-label topic-new">New</span>';newT.forEach(d=>{const txt=d.leadershipKnow||d.whatWouldChange||d.whatHeard||'';h+=`<div class="topic-item"><div class="topic-project">${esc(d.project||client)}</div>• ${esc(txt.substring(0,120))}${txt.length>120?'...':''}</div>`})}
+    if(oldT.length){h+='<span class="topic-label topic-older" style="margin-top:8px">Earlier</span>';oldT.forEach(d=>{const txt=d.leadershipKnow||d.whatWouldChange||d.whatHeard||'';h+=`<div class="topic-item"><div class="topic-project">${esc(d.project||client)}</div>• ${esc(txt.substring(0,120))}${txt.length>120?'...':''}</div>`})}
+    h+='</div>';
+  });
+  return h;
 }
 
 // ============================================================
 // INDIVIDUAL RESPONSES
 // ============================================================
-function renderDetail() {
-  const all = getFiltered();
-  if (!all.length) { document.getElementById('detailTab').innerHTML = '<div class="empty">No responses match filters.</div>'; return; }
-
-  let h = '';
-  all.forEach(d => {
-    const isSk = d.status === 'Skipped';
-    h += `<div class="detail-card"><div class="detail-top"><div>
-      <div class="detail-name">${esc(d.consultant)}</div>
-      <div class="detail-sub">${[d.client, d.project, d.practiceArea, d.role, d.date ? d.date.toLocaleDateString() : ''].filter(Boolean).map(esc).join(' • ')}</div>
-    </div>
-    <span class="status-badge" style="background:${isSk ? 'var(--yellow-bg)' : 'var(--green-bg)'};color:${isSk ? 'var(--yellow)' : 'var(--green)'}">${d.status}</span></div>`;
-
-    if (isSk) {
-      h += `<div class="text-field-val">Skipped — ${esc(d.skipReason || 'No reason given')}</div>`;
-    } else {
-      h += `<div class="metrics-grid">
-        <div class="metric"><div class="metric-lbl">Client Tone</div><div class="metric-val" style="color:${d.clientTone ? scaleColor(d.clientTone, 4) : 'var(--text3)'}">${d.clientTone || '—'} <span style="font-size:11px">${d.clientTone ? TONE[d.clientTone] : ''}</span></div></div>
-        <div class="metric"><div class="metric-lbl">Confidence</div><div class="metric-val" style="color:${d.engagementConfidence ? scaleColor(d.engagementConfidence, 5) : 'var(--text3)'}">${d.engagementConfidence || '—'} <span style="font-size:11px">${d.engagementConfidence ? CONF[d.engagementConfidence] : ''}</span></div></div>
-        <div class="metric"><div class="metric-lbl">Bandwidth</div><div class="metric-val" style="color:${d.bandwidth ? scaleColor(d.bandwidth, 5) : 'var(--text3)'}">${d.bandwidth || '—'} <span style="font-size:11px">${d.bandwidth ? BW[d.bandwidth] : ''}</span></div></div>
-      </div>`;
-      if (d.leadershipKnow) h += `<div class="text-field"><div class="text-field-lbl">💬 Leadership Should Know</div><div class="text-field-val">${esc(d.leadershipKnow)}</div></div>`;
-      if (d.whatWouldChange) h += `<div class="text-field"><div class="text-field-lbl">🔄 Would Change</div><div class="text-field-val">${esc(d.whatWouldChange)}</div></div>`;
-      if (d.whatHeard) h += `<div class="text-field"><div class="text-field-lbl">👂 What Heard</div><div class="text-field-val">${esc(d.whatHeard)}</div></div>`;
+function renderDetail(){
+  const all=getFiltered();
+  if(!all.length){document.getElementById('detailTab').innerHTML='<div class="empty">No responses match filters.</div>';return}
+  let h='';
+  all.forEach(d=>{
+    const isSk=d.status==='Skipped';
+    h+=`<div class="detail-card"><div class="detail-top"><div><div class="detail-name">${esc(d.consultant)}</div><div class="detail-sub">${[d.client,d.project,d.practiceArea,d.role,d.date?d.date.toLocaleDateString():''].filter(Boolean).map(esc).join(' • ')}</div></div><span class="status-badge" style="background:${isSk?'var(--yellow-bg)':'var(--green-bg)'};color:${isSk?'var(--yellow)':'var(--green)'}">${d.status}</span></div>`;
+    if(isSk){h+=`<div class="text-field-val">Skipped — ${esc(d.skipReason||'No reason given')}</div>`}
+    else{
+      h+=`<div class="metrics-grid"><div class="metric"><div class="metric-lbl">Client Tone</div><div class="metric-val" style="color:${d.clientTone?scaleColor(d.clientTone,4):'var(--text3)'}">${d.clientTone||'—'} <span style="font-size:11px">${d.clientTone?TONE[d.clientTone]:''}</span></div></div><div class="metric"><div class="metric-lbl">Confidence</div><div class="metric-val" style="color:${d.engagementConfidence?scaleColor(d.engagementConfidence,5):'var(--text3)'}">${d.engagementConfidence||'—'} <span style="font-size:11px">${d.engagementConfidence?CONF[d.engagementConfidence]:''}</span></div></div><div class="metric"><div class="metric-lbl">Bandwidth</div><div class="metric-val" style="color:${d.bandwidth?scaleColor(d.bandwidth,5):'var(--text3)'}">${d.bandwidth||'—'} <span style="font-size:11px">${d.bandwidth?BW[d.bandwidth]:''}</span></div></div></div>`;
+      if(d.leadershipKnow)h+=`<div class="text-field"><div class="text-field-lbl">💬 Leadership Should Know</div><div class="text-field-val">${esc(d.leadershipKnow)}</div></div>`;
+      if(d.whatWouldChange)h+=`<div class="text-field"><div class="text-field-lbl">🔄 Would Change</div><div class="text-field-val">${esc(d.whatWouldChange)}</div></div>`;
+      if(d.whatHeard)h+=`<div class="text-field"><div class="text-field-lbl">👂 What Heard</div><div class="text-field-val">${esc(d.whatHeard)}</div></div>`;
     }
-    h += '</div>';
+    h+='</div>';
+  });
+  document.getElementById('detailTab').innerHTML=h;
+}
+
+// ============================================================
+// USAGE TRENDS
+// ============================================================
+function renderUsage(){
+  const all=ALL_DATA; // Use all data regardless of filters for usage stats
+  const managers=[...new Set(all.map(d=>d.manager).filter(Boolean))].sort();
+  const consultants=[...new Set(all.map(d=>d.consultant))].sort();
+
+  let h='<div style="margin-bottom:16px;display:flex;align-items:center;gap:12px">';
+  h+='<label style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">Manager:</label>';
+  h+='<select id="usageManagerSelect" class="filter-select" onchange="render()" style="min-width:200px"><option>All</option>';
+  managers.forEach(m=>{h+=`<option>${esc(m)}</option>`});
+  h+='</select></div>';
+
+  const selMgr=document.getElementById('usageManagerSelect')?.value||'All';
+  let filtered=selMgr==='All'?all:all.filter(d=>d.manager===selMgr);
+
+  // Weekly volume
+  const weekLabels=weeklyLabels(filtered);
+  const weekCounts=weeklyCounts(filtered);
+
+  h+='<div class="two-col">';
+  h+=`<div class="card"><h3 style="margin-bottom:12px">Response Volume by Week</h3><div class="chart-container">${lineChart(weekCounts,weekLabels,'#3b82f6',140)}</div></div>`;
+
+  // Completion rate: responses / total triggered (all data entries including no-response)
+  // Since we only have submissions that were either Completed or Skipped, and "no response" = not in data,
+  // we need consultant count per week. We'll use total unique consultants as denominator per week.
+  const weekCompRate=[];
+  const wks=weeklyLabels(filtered);
+  wks.forEach(wk=>{
+    const wkData=filtered.filter(d=>d.date&&weekKey(d.date)===wk);
+    const responded=wkData.filter(d=>d.status==='Completed'||d.status==='Skipped').length;
+    const total=consultants.length||1; // Total possible respondents
+    weekCompRate.push(Math.min(100,Math.round((responded/total)*100)));
   });
 
-  document.getElementById('detailTab').innerHTML = h;
+  h+=`<div class="card"><h3 style="margin-bottom:12px">Completion Rate by Week</h3><div class="chart-container">${lineChart(weekCompRate,wks,'var(--green)',140)}</div><div style="font-size:11px;color:var(--text3);margin-top:4px">% = (Submitted + Skipped) / Total Consultants. Skip counts as a response.</div></div>`;
+  h+='</div>';
+
+  // Non-responders table
+  const respCounts={};
+  consultants.forEach(c=>{respCounts[c]={name:c,responded:0,noResponse:0,total:0}});
+  // Count by week presence
+  const totalWeeks=wks.length||1;
+  filtered.forEach(d=>{
+    if(respCounts[d.consultant]){
+      respCounts[d.consultant].total++;
+      if(d.status==='Completed'||d.status==='Skipped')respCounts[d.consultant].responded++;
+    }
+  });
+  const nonResp=Object.values(respCounts).map(c=>{
+    c.noResponse=totalWeeks-c.responded;
+    c.rate=totalWeeks>0?Math.round((c.responded/totalWeeks)*100):0;
+    return c;
+  }).sort((a,b)=>a.rate-b.rate);
+
+  h+=`<div class="card"><div class="card-header"><h3>Response Rates by Consultant</h3><span class="card-sub">Sorted by lowest response rate</span></div>`;
+  h+='<table class="usage-table"><thead><tr><th>Consultant</th><th>Responses</th><th>No Response</th><th>Rate</th></tr></thead><tbody>';
+  nonResp.forEach(c=>{
+    const color=c.rate>=80?'var(--green)':c.rate>=50?'var(--yellow)':'var(--red)';
+    h+=`<tr><td style="font-weight:600;color:var(--text)">${esc(c.name)}</td><td class="mono">${c.responded}</td><td class="mono">${c.noResponse}</td><td><span style="color:${color};font-weight:600;font-family:var(--mono)">${c.rate}%</span><span class="rate-bar" style="width:60px"><span class="rate-fill" style="width:${c.rate}%;background:${color}"></span></span></td></tr>`;
+  });
+  h+='</tbody></table></div>';
+
+  // Skip Summary (moved from Overview)
+  const skips=filtered.filter(d=>d.status==='Skipped');
+  if(skips.length>0){
+    h+=`<div class="skip-summary"><div class="card-header"><h3>Skip Summary</h3><span class="card-sub">${skips.length} skipped — Skipping is OK! Better than ignoring.</span></div>`;
+    skips.forEach(d=>{
+      h+=`<div class="skip-row"><span style="font-weight:600;color:var(--text);min-width:140px">${esc(d.consultant)}</span><span style="color:var(--text3);min-width:120px">${esc(d.client)}</span><span style="color:var(--text2);flex:1">${esc(d.skipReason||'No reason given')}</span><span style="color:var(--text3);font-size:12px">${d.date?d.date.toLocaleDateString():''}</span></div>`;
+    });
+    h+='</div>';
+  }
+
+  document.getElementById('usageTab').innerHTML=h;
 }
 
 // ============================================================
 // RENDER
 // ============================================================
-function render() { if (!dataLoaded) return; if (currentTab === 'overview') renderOverview(); else if (currentTab === 'ai') renderAI(); else if (currentTab === 'detail') renderDetail(); }
+function render(){if(!dataLoaded)return;if(currentTab==='overview')renderOverview();else if(currentTab==='ai')renderAI();else if(currentTab==='meeting')renderMeeting();else if(currentTab==='detail')renderDetail();else if(currentTab==='usage')renderUsage()}
 
-// AUTO-LOAD ON PAGE OPEN
+// AUTO-LOAD
 loadData();
+
 </script>
 </body>
 </html>
