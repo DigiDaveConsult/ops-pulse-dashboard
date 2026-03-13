@@ -625,29 +625,29 @@ function renderUsage(){
   const wks=weeklyLabels(filtered);
   wks.forEach(wk=>{
     const wkData=filtered.filter(d=>d.date&&weekKey(d.date)===wk);
-    const responded=wkData.filter(d=>d.status==='Completed'||d.status==='Skipped').length;
-    const total=consultants.length||1; // Total possible respondents
-    weekCompRate.push(Math.min(100,Math.round((responded/total)*100)));
+    // Count unique consultants who responded (completed or skipped) this week
+    const respondents=new Set(wkData.filter(d=>d.status==='Completed'||d.status==='Skipped').map(d=>d.consultant));
+    const total=consultants.length||1;
+    weekCompRate.push(Math.min(100,Math.round((respondents.size/total)*100)));
   });
 
   h+=`<div class="card"><h3 style="margin-bottom:12px">Completion Rate by Week</h3><div class="chart-container">${lineChart(weekCompRate,wks,'var(--green)',140)}</div><div style="font-size:11px;color:var(--text3);margin-top:4px">% = (Submitted + Skipped) / Total Consultants. Skip counts as a response.</div></div>`;
   h+='</div>';
 
-  // Non-responders table
+  // Non-responders table — count unique weeks each consultant responded
   const respCounts={};
-  consultants.forEach(c=>{respCounts[c]={name:c,responded:0,noResponse:0,total:0}});
-  // Count by week presence
-  const totalWeeks=wks.length||1;
+  consultants.forEach(c=>{respCounts[c]={name:c,weeksResponded:new Set(),total:0}});
   filtered.forEach(d=>{
-    if(respCounts[d.consultant]){
-      respCounts[d.consultant].total++;
-      if(d.status==='Completed'||d.status==='Skipped')respCounts[d.consultant].responded++;
+    if(respCounts[d.consultant]&&d.date&&(d.status==='Completed'||d.status==='Skipped')){
+      respCounts[d.consultant].weeksResponded.add(weekKey(d.date));
     }
   });
+  const totalWeeks=wks.length||1;
   const nonResp=Object.values(respCounts).map(c=>{
-    c.noResponse=totalWeeks-c.responded;
-    c.rate=totalWeeks>0?Math.round((c.responded/totalWeeks)*100):0;
-    return c;
+    const responded=c.weeksResponded.size;
+    const noResponse=Math.max(0,totalWeeks-responded);
+    const rate=totalWeeks>0?Math.min(100,Math.round((responded/totalWeeks)*100)):0;
+    return{name:c.name,responded,noResponse,rate};
   }).sort((a,b)=>a.rate-b.rate);
 
   h+=`<div class="card"><div class="card-header"><h3>Response Rates by Consultant</h3><span class="card-sub">Sorted by lowest response rate</span></div>`;
