@@ -198,12 +198,7 @@ td { padding:12px 14px; font-size:13px; color:var(--text2); }
 const SHEET_ID = "1ycq6Oi9U5ThnisDc0Ij8QYwKmqQiD57O9lTRrb4wskc";
 const SUBMISSIONS_TAB = "Submissions";
 const AI_TAB = "AI_Analysis";
-const SUBMISSIONS_GID = "0";
-const AI_TAB_GID = "559870291";
-
-function sheetCsvUrl(gid) {
-  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
-}
+function sheetCsvUrl(tab) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`; }
 
 // STATE
 let ALL_DATA = [], AI_ANALYSIS = null, currentTab = 'overview', expandedClient = null, dataLoaded = false;
@@ -217,90 +212,30 @@ function esc(s){if(!s)return'';const d=document.createElement('div');d.textConte
 function num(v){if(v===null||v===undefined||v==='')return null;const n=Number(v);return isNaN(n)?null:n}
 
 // CSV PARSER
-function parseCsv(text){const lines=[];let cur='',inQ=false,row=[];for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(inQ){if(ch==='"'&&nx==='"'){cur+='"';i++}else if(ch==='"')inQ=false;else cur+=ch}else{if(ch==='"')inQ=true;else if(ch===','){row.push(cur.trim());cur=''}else if(ch==='\n'||(ch==='\r'&&nx==='\n')){row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];if(ch==='\r')i++}else cur+=ch}}row.push(cur.trim());if(row.some(c=>c!==''))lines.push(row);return lines}
+function parseCsv(text)
+
+{const lines=[];let cur='',inQ=false,row=[];for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];if(inQ){if(ch==='"'&&nx==='"'){cur+='"';i++}else if(ch==='"')inQ=false;else cur+=ch}else{if(ch==='"')inQ=true;else if(ch===','){row.push(cur.trim());cur=''}else if(ch==='\n'||(ch==='\r'&&nx==='\n')){row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];if(ch==='\r')i++}else cur+=ch}}row.push(cur.trim());if(row.some(c=>c!==''))lines.push(row);return lines}
 function csvToObj(text){const lines=parseCsv(text);if(lines.length<2)return[];const hdr=lines[0];return lines.slice(1).map(row=>{const o={};hdr.forEach((h,i)=>{o[h]=row[i]||''});return o})}
 
 // DATA LOADING
 async function loadData(){
   try{
     updateStatus('loading','Fetching submissions...');
-    const r = await fetch(sheetCsvUrl(SUBMISSIONS_GID));
-    if(!r.ok) throw new Error(`Sheet error: ${r.status}`);
-    const rows = csvToObj(await r.text());
-    ALL_DATA = rows.map(s => ({
-      consultant: s.ConsultantName || '',
-      client: s.Client || '',
-      industry: s.Industry || '',
-      practiceArea: s.PracticeArea || '',
-      role: s.Role || '',
-      project: s.ProjectDescription || '',
-      status: s.ResponseStatus || 'Completed',
-      date: s.SubmissionDate ? new Date(s.SubmissionDate) : null,
-      clientTone: num(s.ClientTone),
-      engagementConfidence: num(s.EngagementConfidence),
-      bandwidth: num(s.Bandwidth),
-      leadershipKnow: s.LeadershipKnow || '',
-      whatWouldChange: s.WhatWouldChange || '',
-      whatHeard: s.WhatHeard || '',
-      skipReason: s.SkipReason || ''
-    }))
-    .filter(d => d.consultant || d.client)
-    .sort((a,b) => (b.date || 0) - (a.date || 0));
-
-    AI_ANALYSIS = null;
-
-    try{
-      const ar = await fetch(sheetCsvUrl(AI_TAB_GID));
-      if(ar.ok){
-        const aiRows = csvToObj(await ar.text());
-        if(aiRows.length > 0){
-          const l = aiRows[aiRows.length - 1];
-          AI_ANALYSIS = {
-            summary: l.Summary || '',
-            themes: l.Themes || '',
-            risks: l.Risks || '',
-            opportunities: l.Opportunities || '',
-            patterns: l.Patterns || '',
-            generatedAt: l.GeneratedAt || ''
-          };
-        }
-      }
-    }catch(e){
-      console.warn('AI tab not found:', e.message);
-    }
-
-    dataLoaded = true;
-    document.getElementById('loadingState').classList.add('hidden');
-    document.getElementById('overviewTab').classList.remove('hidden');
-    updateStatus('ok', `${ALL_DATA.length} records loaded`);
-    setDateDefaults();
-    populateFilters();
-    render();
+    const r=await fetch(sheetCsvUrl(SUBMISSIONS_TAB));if(!r.ok)throw new Error(`Sheet error: ${r.status}`);
+    const rows=csvToObj(await r.text());
+    ALL_DATA=rows.map(s=>({consultant:s.ConsultantName||'',client:s.Client||'',industry:s.Industry||'',practiceArea:s.PracticeArea||'',role:s.Role||'',project:s.ProjectDescription||'',status:s.ResponseStatus||'Completed',date:s.SubmissionDate?new Date(s.SubmissionDate):null,clientTone:num(s.ClientTone),engagementConfidence:num(s.EngagementConfidence),bandwidth:num(s.Bandwidth),leadershipKnow:s.LeadershipKnow||'',whatWouldChange:s.WhatWouldChange||'',whatHeard:s.WhatHeard||'',skipReason:s.SkipReason||''})).filter(d=>d.consultant||d.client).sort((a,b)=>(b.date||0)-(a.date||0));
+    try{const ar=await fetch(sheetCsvUrl(AI_TAB));if(ar.ok){const aiRows=csvToObj(await ar.text());if(aiRows.length>0){const l=aiRows[aiRows.length-1];AI_ANALYSIS={summary:l.Summary||'',themes:l.Themes||'',risks:l.Risks||'',opportunities:l.Opportunities||'',patterns:l.Patterns||'',generatedAt:l.GeneratedAt||''}}}}catch(e){console.warn('AI tab not found:',e.message)}
+    dataLoaded=true;document.getElementById('loadingState').classList.add('hidden');document.getElementById('overviewTab').classList.remove('hidden');
+    updateStatus('ok',`${ALL_DATA.length} records loaded`);setDateDefaults();populateFilters();render();
   }catch(err){
     console.error(err);
-    document.getElementById('loadingState').innerHTML = `<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
-    updateStatus('error', 'Load failed');
+    document.getElementById('loadingState').innerHTML=`<div style="text-align:center;color:var(--red);font-size:14px"><div style="font-size:18px;margin-bottom:8px">⚠ Data Load Error</div><div style="color:var(--text2);margin-bottom:12px">${esc(err.message)}</div><div style="color:var(--text3);font-size:12px;max-width:500px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with link can view" and the SHEET_ID is correct.</div><button onclick="loadData()" style="padding:8px 20px;background:var(--teal);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600">Retry</button></div>`;
+    updateStatus('error','Load failed');
   }
 }
+function updateStatus(s,msg){const c={ok:'var(--green)',loading:'var(--yellow)',error:'var(--red)'};document.getElementById('statusDot').style.background=c[s]||'var(--text3)';document.getElementById('dataStatus').innerHTML=`<div class="dot" style="background:${c[s]||'var(--text3)'}"></div><span>${msg}</span>`}
+async function refreshData(){const btn=document.getElementById('refreshBtn'),icon=document.getElementById('refreshIcon');btn.disabled=true;icon.textContent='⟳';icon.style.display='inline-block';icon.style.animation='spin 0.8s linear infinite';await loadData();btn.disabled=false;icon.textContent='🔄';icon.style.animation=''}
 
-function updateStatus(s,msg){
-  const c = {ok:'var(--green)',loading:'var(--yellow)',error:'var(--red)'};
-  document.getElementById('statusDot').style.background = c[s] || 'var(--text3)';
-  document.getElementById('dataStatus').innerHTML = `<div class="dot" style="background:${c[s]||'var(--text3)'}"></div><span>${msg}</span>`;
-}
-
-async function refreshData(){
-  const btn = document.getElementById('refreshBtn');
-  const icon = document.getElementById('refreshIcon');
-  btn.disabled = true;
-  icon.textContent = '⟳';
-  icon.style.display = 'inline-block';
-  icon.style.animation = 'spin 0.8s linear infinite';
-  await loadData();
-  btn.disabled = false;
-  icon.textContent = '🔄';
-  icon.style.animation = '';
-}
 // ============================================================
 // DATE & FILTERS
 // ============================================================
